@@ -344,7 +344,7 @@ function _prompt_command() {
 #'... your usual prompt goes here, e.g. \[\e[1;34m\]\w \$\[\e[0m\] '
 }
 
-#PROMPT_COMMAND=_prompt_command
+PROMPT_COMMAND=_prompt_command
 # <<< GIT-Prompt <<<
 
 # ------------------------------------------------------------------------------ #
