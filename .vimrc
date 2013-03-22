@@ -3,6 +3,7 @@ filetype plugin indent on
 syntax on
 "set mouse=a             " Enable mouse usage (all modes)
 set showmatch           " Show matching brackets.
+set hlsearch
 set background=dark
 set virtualedit=all
 set nowrap
