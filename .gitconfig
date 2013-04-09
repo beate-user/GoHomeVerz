@@ -1,0 +1,123 @@
+[push]
+	default = upstream
+[init]
+	templatedir = /home/murvin/.git-template-dir
+[gui]
+	recentrepo = /home/murvin/Dokumente
+	fontdiff = -family Courier -size 11 -weight normal -slant roman -underline 0 -overstrike 0
+[giggle]
+	main-window-maximized = true
+	main-window-geometry = 0x0+0+0
+	main-window-view = FileView
+	history-view-vpane-position = 535
+	file-view-vpane-position = 226
+[user]
+	name = Murvin
+	email = murvin.kosinski@sap.com
+[color]
+ 	branch = true
+	diff = true
+	grep = true
+	interactive = true
+	pager = false
+	showbranch = true
+	status = true
+	ui = true
+[color "diff"]
+	commit = bold blue
+	frag = black bold
+	func = black bold
+	meta = blue bold
+	new = green
+	old = red
+	plain = normal
+	whitespace = reverse normal
+[color "grep"]
+	match = red
+[color "branch"]
+	current = bold red
+	local = normal
+	plain = normal
+	remote = dim
+[color "interactive"]
+	header = normal
+	help = blue
+	error = reverse
+[color "status"]
+	added = green
+	changed = red
+	header = normal
+#nobranch = true
+	untracked = dim
+	updated = green
+[alias]
+#	mk-log = log --no-color --topo-order --pretty=format:\"%ci   %H <- %P   %d   %cn\"
+#	mk-whatchanged = log --no-color --topo-order --name-status --pretty=format:\"%ci   %H <- %P   %d   %cn\"
+#	mk-log-one = log -1 --no-color --topo-order --pretty=format:\"%ci   %H <- %P   %d   %cn\"
+#	mk-whatchanged-one = log -1 --no-color --topo-order --name-status --pretty=format:\"%ci   %H <- %P   %d   %cn\"
+
+#	mk-test = log --no-color --topo-order --pretty=format:\"%ct %H <- %P %d %cn [%an] : %s\"
+#	mk-log = log --no-color --topo-order --pretty=format:\"%ci %h <- %p %d %cn [%an]\"
+#	mk-whatchanged = whatchanged -w -b --no-color --topo-order --pretty=format:\"%ci %h <- %p %d %cn [%an]%n\"
+#	mk-log-one = log -1 --no-color --topo-order --pretty=format:\"%ci %h <- %p %d %cn [%an]\"
+#	mk-whatchanged-one = whatchanged -1 -w -b --no-color --topo-order --pretty=format:\"%ci %h <- %p %d %cn [%an]\"
+#	mk-log-long = log --no-color --topo-order --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s\"
+#	mk-whatchanged-long = whatchanged -b -w --no-color --topo-order --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s%n\"
+#	mk-log-one-long = log -1 --no-color --topo-order --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s\"
+#	mk-whatchanged-one-long = whatchanged -1 -w -b --no-color --topo-order --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s\"
+
+	mk-test = log --no-color --pretty=format:\"%ct %H <- %P %d %cn [%an] : %s\"
+	mk-log = log --no-color --pretty=format:\"%ci %h <- %p %d %cn [%an]\"
+	mk-whatchanged = whatchanged -w -b --no-color --pretty=format:\"%ci %h <- %p %d %cn [%an]%n\"
+	mk-log-one = log -1 --no-color --pretty=format:\"%ci %h <- %p %d %cn [%an]\"
+	mk-whatchanged-one = whatchanged -1 -w -b --no-color --pretty=format:\"%ci %h <- %p %d %cn [%an]\"
+	mk-log-long = log --no-color --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s\"
+	mk-whatchanged-long = whatchanged -b -w --no-color --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s%n\"
+	mk-log-one-long = log -1 --no-color --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s\"
+	mk-whatchanged-one-long = whatchanged -1 -w -b --no-color --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s\"
+
+	mk-diff = diff -U0 -w -b
+	mk-check = !/home/murvin/git-tools/scripts/check
+	mk-find-ticket = !/home/murvin/git-tools/scripts/git-find-ticket
+	mk-status = !/home/murvin/git-tools/scripts/status
+	mk-branch-off = !perl /home/murvin/git-tools/scripts/branch_off
+	mk-check-all = !/home/murvin/git-tools/scripts/check_all
+	mk-branch = branch -v 
+	mk-branch-long = branch -v --no-abbrev
+	mk-stash-list = stash list --pretty=format:\"%ci %gd (%h): %s\"
+	mk-stash-list-long = stash list --pretty=format:\"%ci %gd (%H): %s\"
+	mk-submodules-status = submodule foreach git status -uno
+[color "decorate"]
+	branch = bold
+	remoteBranch = normal
+	tag = normal
+	stash = normal
+	HEAD = bold red
+[rebase]
+	stat = true
+[core]
+	whitespace = trailing-space
+#,space-before-tab,indent-with-non-tab,tabwidth=1
+[apply]
+	ignorewhitespace = change
+	whitespace = fix
+[diff]
+	mnemonicprefix = true
+	tool = vimdiff
+[status]
+	showUntrackedFiles = no
+[merge]
+	conflictstyle = diff3
+ 	tool = mk-vimdiff
+[mergetool "mk-gvimdiff"]
+	keepBackup = false
+	cmd = /home/murvin/git-tools/scripts/diffconflicts.sh gvim $BASE $LOCAL $REMOTE $MERGED
+#	trustExitCode = true
+[mergetool "mk-vimdiff"]
+	keepBackup = false
+	cmd = /home/murvin/git-tools/scripts/diffconflicts.sh vim $BASE $LOCAL $REMOTE $MERGED
+#	trustExitCode = true
+[grep]
+	lineNumber = true
+[http]
+	proxy = http://proxy.wdf.sap.corp:8080/
