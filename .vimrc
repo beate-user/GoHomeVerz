@@ -1,5 +1,9 @@
-execute pathogen#infect()
-filetype plugin indent on
+if !&diff
+	execute pathogen#infect()
+	filetype plugin indent on
+"	colorscheme peaksea
+        syntax off
+endif 
 syntax on
 "set mouse=a             " Enable mouse usage (all modes)
 set showmatch           " Show matching brackets.
@@ -11,7 +15,7 @@ set number
 "set cursorline
 "set cursorcolumn
 "colorscheme delek
-colorscheme default
+colorscheme inkpot
 if &diff
 "	colorscheme peaksea
         syntax off
