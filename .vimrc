@@ -1,10 +1,7 @@
 if !&diff
 	execute pathogen#infect()
 	filetype plugin indent on
-"	colorscheme peaksea
-        syntax off
 endif 
-syntax on
 "set mouse=a             " Enable mouse usage (all modes)
 set showmatch           " Show matching brackets.
 set hlsearch
@@ -15,10 +12,12 @@ set number
 "set cursorline
 "set cursorcolumn
 "colorscheme delek
-colorscheme inkpot
 if &diff
-"	colorscheme peaksea
+	colorscheme inkpot
         syntax off
+else
+	colorscheme default
+	syntax on
 endif 
 set diffopt=filler,iwhite
         set diffexpr=MyDiff()
