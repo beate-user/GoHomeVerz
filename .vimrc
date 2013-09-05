@@ -2,7 +2,7 @@ if !&diff
 	execute pathogen#infect()
 	filetype plugin indent on
 endif 
-"set mouse=a             " Enable mouse usage (all modes)
+set mouse=a             " Enable mouse usage (all modes)
 set showmatch           " Show matching brackets.
 set hlsearch
 set background=dark

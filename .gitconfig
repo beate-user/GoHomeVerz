@@ -67,14 +67,14 @@
 #	mk-whatchanged-one-long = whatchanged -1 -w -b --no-color --topo-order --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s\"
 
 	mk-test = log --no-color --pretty=format:\"%ct %H <- %P %d %cn [%an] : %s\"
-	mk-log = log --no-color --pretty=format:\"%ci %h <- %p %d %cn [%an]\"
-	mk-whatchanged = whatchanged -w -b --no-color --pretty=format:\"%ci %h <- %p %d %cn [%an]%n\"
+	mk-log = log --no-color --pretty=format:\"%ci %h <- %p %d %cn [%an] [%ai]\"
+	mk-whatchanged = whatchanged -w -b --no-color --pretty=format:\" %ci %h <- %p %d %cn [%an]%n[%ai]\"
 	mk-log-one = log -1 --no-color --pretty=format:\"%ci %h <- %p %d %cn [%an]\"
-	mk-whatchanged-one = whatchanged -1 -w -b --no-color --pretty=format:\"%ci %h <- %p %d %cn [%an]\"
-	mk-log-long = log --no-color --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s\"
-	mk-whatchanged-long = whatchanged -b -w --no-color --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s%n\"
-	mk-log-one-long = log -1 --no-color --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s\"
-	mk-whatchanged-one-long = whatchanged -1 -w -b --no-color --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s\"
+	mk-whatchanged-one = whatchanged -1 -w -b --no-color --pretty=format:\"%ci %h <- %p %d %cn [%an] [%ai]\"
+	mk-log-long = log --no-color --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s [%ai]\"
+	mk-whatchanged-long = whatchanged -b -w --no-color --pretty=format:\" %ci %H <- %P %d %cn [%an] : %s%n[%ai]\"
+	mk-log-one-long = log -1 --no-color --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s [%ai]\"
+	mk-whatchanged-one-long = whatchanged -1 -w -b --no-color --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s [%ai]\"
 
 	mk-diff = diff -U0 -w -b
 	mk-check = !/home/murvin/git-tools/scripts/check
