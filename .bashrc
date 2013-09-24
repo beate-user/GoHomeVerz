@@ -338,7 +338,7 @@ function _prompt_command() {
 '\033[00m'\
 '\]'\
 "\\-> "\
-"\u@ "\
+"\u@\h "\
 '\$ '
 #    echo -ne '\e]2;'$PWD'\007\e]1;\007'
 #'... your usual prompt goes here, e.g. \[\e[1;34m\]\w \$\[\e[0m\] '
