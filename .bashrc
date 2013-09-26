@@ -256,65 +256,69 @@ function _git_prompt_SAFF() {
     fi
 }
 function _git_prompt() {
-    local git_status="`git status -unormal 2>&1`"
-    if ! [[ "$git_status" =~ Not\ a\ git\ repo ]]
+    branch=$(git mk-status)
+    erg=$?
+    if [ "0" == "$erg" ]
     then
-# white
-	fg=$BWhite
-        if [[ "$git_status" =~ nothing\ to\ commit ]]
-	then
-# green
-            local ansi=$Green
-            local fg=$Green
-        elif [[ "$git_status" =~ nothing\ added\ to\ commit\ but\ untracked\ files\ present ]]
-	then
-# brown/yellow
-            local ansi=$BYellow
-	    local fg=$BYellow
-        else
-# red
-#            local ansi=41
-            local ansi=$BRed
-        fi
-        # if [[ "$git_status" =~ On\ branch\ ([^[:space:]]+) ]]; then
-        #     branch=${BASH_REMATCH[1]}
-        #     test "$branch" != master || branch=' '
-        # else
-        #     # Detached HEAD.  (branch=HEAD is a faster alternative.)
-        #     branch="(`git describe --all --contains --abbrev=4 HEAD 2> /dev/null ||
-        #         echo HEAD`)"
-        # fi
-	branch=$(git mk-status)
-    	local rem_git_status=$(git log --format=oneline --no-color --decorate -1 |grep "(.*origin.*"$(git branch --no-color|grep "^\*"|sed -s "s/^\*\s*\(.*\)/\1/")".*)" >/dev/null && echo "OK")
-	if [ "$rem_git_status" == "OK" ]
-	then
-	    local rem_fg=$fg
-	    local rem_bg=$fg
-	else
-	    local rem_fg=$fg
-	    local rem_bg=$On_Red
-	fi
-	echo -n '\['
-	echo -n "$rem_fg$rem_bg"
-	echo -n '\]'
+	    local git_status="`git status -unormal 2>&1`"
+	    if ! [[ "$git_status" =~ Not\ a\ git\ repo ]]
+	    then
+	# white
+		fg=$BWhite
+		if [[ "$git_status" =~ nothing\ to\ commit ]]
+		then
+	# green
+		    local ansi=$Green
+		    local fg=$Green
+		elif [[ "$git_status" =~ nothing\ added\ to\ commit\ but\ untracked\ files\ present ]]
+		then
+	# brown/yellow
+		    local ansi=$BYellow
+		    local fg=$BYellow
+		else
+	# red
+	#            local ansi=41
+		    local ansi=$BRed
+		fi
+		# if [[ "$git_status" =~ On\ branch\ ([^[:space:]]+) ]]; then
+		#     branch=${BASH_REMATCH[1]}
+		#     test "$branch" != master || branch=' '
+		# else
+		#     # Detached HEAD.  (branch=HEAD is a faster alternative.)
+		#     branch="(`git describe --all --contains --abbrev=4 HEAD 2> /dev/null ||
+		#         echo HEAD`)"
+		# fi
+		local rem_git_status=$(git log --format=oneline --no-color --decorate -1 |grep "(.*origin.*"$(git branch --no-color|grep "^\*"|sed -s "s/^\*\s*\(.*\)/\1/")".*)" >/dev/null && echo "OK")
+		if [ "$rem_git_status" == "OK" ]
+		then
+		    local rem_fg=$fg
+		    local rem_bg=$fg
+		else
+		    local rem_fg=$fg
+		    local rem_bg=$On_Red
+		fi
+		echo -n '\['
+		echo -n "$rem_fg$rem_bg"
+		echo -n '\]'
 
-	echo -n '['
-	echo -n '\[\e[0m\]'
+		echo -n '['
+		echo -n '\[\e[0m\]'
 
-        echo -n '\['
-        echo -n "$fg$ansi"
-        echo -n '\]'
+		echo -n '\['
+		echo -n "$fg$ansi"
+		echo -n '\]'
 
-        echo -n "$branch"
-	echo -n '\[\e[0m\]'
+		echo -n "$branch"
+		echo -n '\[\e[0m\]'
 
-	echo -n '\['
-	echo -n "$rem_fg$rem_bg"
-	echo -n '\]'
+		echo -n '\['
+		echo -n "$rem_fg$rem_bg"
+		echo -n '\]'
 
-	echo -n ']'
+		echo -n ']'
 
-	echo -n '\[\e[0m\]'
+		echo -n '\[\e[0m\]'
+	    fi
     fi
 }
 function _prompt_command() {
