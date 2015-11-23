@@ -190,7 +190,8 @@ fi
 #sshfs  murvin@goxv30002638b:/mnt/exthd/homebackup/home/murvin/ /mnt/exthd/homebackup/home/murvin
 if [ ! -e /mnt/exthd/homebackup/home/murvin ]
 then
-  sshfs  murvin@goxv30002638b:/mnt/exthd/homebackup/home/ /mnt/exthd/homebackup/home
+#  sshfs  murvin@192.168.1.2:/mnt/exthd/homebackup/home/ /mnt/exthd/homebackup/home -o umask=0022
+  sshfs  murvin@192.168.1.2:/mnt/exthd/homebackup/home/ /mnt/exthd/homebackup/home
 fi
 
 # keyboard schnell
@@ -358,3 +359,5 @@ PROMPT_COMMAND=_prompt_command
 title() {
     echo -ne "\033]0;${1}\007"
 }
+
+export PATH=$PATH:/home/murvin/arbeit/
