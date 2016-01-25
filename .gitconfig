@@ -67,14 +67,14 @@
 #	mk-whatchanged-one-long = whatchanged -1 -w -b --no-color --topo-order --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s\"
 
 	mk-test = log --no-color --pretty=format:\"%ct %H <- %P %d %cn [%an] : %s\"
-	mk-log = log --no-color --pretty=format:\"%ci %h <- %p %d %cn [%an] [%ai]\"
-	mk-whatchanged = whatchanged -w -b --no-color --pretty=format:\" %ci %h <- %p %d %cn [%an]%n[%ai]\"
-	mk-log-one = log -1 --no-color --pretty=format:\"%ci %h <- %p %d %cn [%an]\"
-	mk-whatchanged-one = whatchanged -1 -w -b --no-color --pretty=format:\"%ci %h <- %p %d %cn [%an] [%ai]\"
-	mk-log-long = log --no-color --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s [%ai]\"
-	mk-whatchanged-long = whatchanged -b -w --no-color --pretty=format:\" %ci %H <- %P %d %cn [%an] : %s%n[%ai]\"
-	mk-log-one-long = log -1 --no-color --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s [%ai]\"
-	mk-whatchanged-one-long = whatchanged -1 -w -b --no-color --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s [%ai]\"
+	mk-log = log --no-color --pretty=format:\"%ci [%ai] %h <- %p %d %cn [%an]\"
+	mk-whatchanged = whatchanged -w -b --no-color --pretty=format:\" %ci [%ai] %h <- %p %d %cn [%an]\"
+	mk-log-one = log -1 --no-color --pretty=format:\"%ci [%ai] %h <- %p %d %cn [%an]\"
+	mk-whatchanged-one = whatchanged -1 -w -b --no-color --pretty=format:\"%ci [%ai] %h <- %p %d %cn [%an]\"
+	mk-log-long = log --no-color --pretty=format:\"%ci [%ai] %H <- %P %d %cn [%an] : %s\"
+	mk-whatchanged-long = whatchanged -b -w --no-color --pretty=format:\" %ci [%ai] %H <- %P %d %cn [%an] : %s\"
+	mk-log-one-long = log -1 --no-color --pretty=format:\"%ci [%ai] %H <- %P %d %cn [%an] : %s\"
+	mk-whatchanged-one-long = whatchanged -1 -w -b --no-color --pretty=format:\"%ci [%ai] %H <- %P %d %cn [%an] : %s\"
 
 	mk-diff = diff -U0 -w -b
 	mk-check = !/home/murvin/git-tools/scripts/check
@@ -82,7 +82,8 @@
 	mk-status = !/home/murvin/git-tools/scripts/status
 	mk-branch-off = !perl /home/murvin/git-tools/scripts/branch_off
 	mk-check-all = !/home/murvin/git-tools/scripts/check_all
-	mk-branch = branch -v 
+#	mk-branch = branch -v 
+	mk-branch = !/home/murvin/git-tools/scripts/mk-branch
 	mk-branch-long = branch -v --no-abbrev
 	mk-stash-list = stash list --pretty=format:\"%ci %gd (%h): %s\"
 	mk-stash-list-long = stash list --pretty=format:\"%ci %gd (%H): %s\"
