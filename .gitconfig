@@ -82,9 +82,8 @@
 	mk-status = !/home/murvin/git-tools/scripts/status
 	mk-branch-off = !perl /home/murvin/git-tools/scripts/branch_off
 	mk-check-all = !/home/murvin/git-tools/scripts/check_all
-#	mk-branch = branch -v 
 	mk-branch = !/home/murvin/git-tools/scripts/mk-branch
-	mk-branch-long = branch -v --no-abbrev
+	mk-branch-long = !/home/murvin/git-tools/scripts/mk-branch -a
 	mk-stash-list = stash list --pretty=format:\"%ci %gd (%h): %s\"
 	mk-stash-list-long = stash list --pretty=format:\"%ci %gd (%H): %s\"
 	mk-submodules-status = submodule foreach git status -uno
