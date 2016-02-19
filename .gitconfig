@@ -66,15 +66,15 @@
 #	mk-log-one-long = log -1 --no-color --topo-order --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s\"
 #	mk-whatchanged-one-long = whatchanged -1 -w -b --no-color --topo-order --pretty=format:\"%ci %H <- %P %d %cn [%an] : %s\"
 
-	mk-test = log --no-color --pretty=format:\"%ct %H <- %P %d %cn [%an] : %s\"
-	mk-log = log --no-color --pretty=format:\"%ci [%ai] %h <- %p %d %cn [%an]\"
-	mk-whatchanged = whatchanged -w -b --no-color --pretty=format:\" %ci [%ai] %h <- %p %d %cn [%an]\"
-	mk-log-one = log -1 --no-color --pretty=format:\"%ci [%ai] %h <- %p %d %cn [%an]\"
-	mk-whatchanged-one = whatchanged -1 -w -b --no-color --pretty=format:\"%ci [%ai] %h <- %p %d %cn [%an]\"
-	mk-log-long = log --no-color --pretty=format:\"%ci [%ai] %H <- %P %d %cn [%an] : %s\"
-	mk-whatchanged-long = whatchanged -b -w --no-color --pretty=format:\" %ci [%ai] %H <- %P %d %cn [%an] : %s\"
-	mk-log-one-long = log -1 --no-color --pretty=format:\"%ci [%ai] %H <- %P %d %cn [%an] : %s\"
-	mk-whatchanged-one-long = whatchanged -1 -w -b --no-color --pretty=format:\"%ci [%ai] %H <- %P %d %cn [%an] : %s\"
+	mk-test = log --no-color --pretty=format:\"%ct %H <- %P %d %an [%cn] : %s\"
+	mk-log = log --no-color --pretty=format:\"%ai [%ci] %h <- %p %d %an [%cn]\"
+	mk-whatchanged = whatchanged -w -b --no-color --pretty=format:\" %ai [%ci] %h <- %p %d %an [%cn]\"
+	mk-log-one = log -1 --no-color --pretty=format:\"%ai [%ci] %h <- %p %d %an [%cn]\"
+	mk-whatchanged-one = whatchanged -1 -w -b --no-color --pretty=format:\"%ai [%ci] %h <- %p %d %an [%cn]\"
+	mk-log-long = log --no-color --pretty=format:\"%ai [%ci] %H <- %P %d %an [%cn] : %s\"
+	mk-whatchanged-long = whatchanged -b -w --no-color --pretty=format:\" %ai [%ci] %H <- %P %d %an [%cn] : %s\"
+	mk-log-one-long = log -1 --no-color --pretty=format:\"%ai [%ci] %H <- %P %d %an [%cn] : %s\"
+	mk-whatchanged-one-long = whatchanged -1 -w -b --no-color --pretty=format:\"%ai [%ci] %H <- %P %d %an [%cn] : %s\"
 
 	mk-diff = diff -U0 -w -b
 	mk-check = !/home/murvin/git-tools/scripts/check
@@ -84,8 +84,8 @@
 	mk-check-all = !/home/murvin/git-tools/scripts/check_all
 	mk-branch = !/home/murvin/git-tools/scripts/mk-branch
 	mk-branch-long = !/home/murvin/git-tools/scripts/mk-branch -a
-	mk-stash-list = stash list --pretty=format:\"%ci %gd (%h): %s\"
-	mk-stash-list-long = stash list --pretty=format:\"%ci %gd (%H): %s\"
+	mk-stash-list = stash list --pretty=format:\"%ai %gd (%h): %s\"
+	mk-stash-list-long = stash list --pretty=format:\"%ai %gd (%H): %s\"
 	mk-submodules-status = submodule foreach git status -uno
 [color "decorate"]
 	branch = bold

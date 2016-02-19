@@ -197,7 +197,7 @@ fi
 # keyboard schnell
 xset r rate 250 50
 # mouse schnell
-xset m 3 1
+xset m 1 1
 # mouse links
 
 
@@ -289,7 +289,7 @@ function _git_prompt() {
 		#     branch="(`git describe --all --contains --abbrev=4 HEAD 2> /dev/null ||
 		#         echo HEAD`)"
 		# fi
-		local rem_git_status=$(git log --format=oneline --no-color --decorate -1 |grep "(.*origin.*"$(git branch --no-color|grep "^\*"|sed -s "s/^\*\s*\(.*\)/\1/")".*)" >/dev/null && echo "OK")
+ 		local rem_git_status=$(git log --format=oneline --no-color --decorate -1 |grep "(.*origin.*"$(git branch --no-color|grep "^\*"|sed -s "s/^\*\s*\(.*\)/\1/")".*)" >/dev/null && echo "OK")
 		if [ "$rem_git_status" == "OK" ]
 		then
 		    local rem_fg=$fg
