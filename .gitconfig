@@ -77,6 +77,7 @@
 	mk-whatchanged-one-long = whatchanged -1 -w -b --no-color --pretty=format:\"%ai [%ci] %H <- %P %d %an [%cn] : %s\"
 
 	mk-diff = diff -U0 -w -b
+	mk-diff-nice = difftool --no-prompt --tool=robe
 	mk-check = !/home/murvin/git-tools/scripts/check
 	mk-find-ticket = !/home/murvin/git-tools/scripts/git-find-ticket
 	mk-status = !/home/murvin/git-tools/scripts/status
@@ -87,6 +88,15 @@
 	mk-stash-list = stash list --pretty=format:\"%ai %gd (%h): %s\"
 	mk-stash-list-long = stash list --pretty=format:\"%ai %gd (%H): %s\"
 	mk-submodules-status = submodule foreach git status -uno
+
+   	lg = !"git lg1"
+	lg1 = !"git lg1-specific --all --color --full-history"
+    	lg2 = !"git lg2-specific --all --color --full-history"
+    	lg3 = !"git lg3-specific --all --color --full-history"
+    	lg1-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
+    	lg2-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
+    	lg3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(auto)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'
+
 [color "decorate"]
 	branch = bold
 	remoteBranch = normal
@@ -97,6 +107,7 @@
 	stat = true
 [core]
 	whitespace = trailing-space
+	editor = vim
 #,space-before-tab,indent-with-non-tab,tabwidth=1
 [apply]
 	ignorewhitespace = change
@@ -121,3 +132,16 @@
 	lineNumber = true
 [http]
 	proxy = http://proxy.wdf.sap.corp:8080/
+
+[credential]
+	helper = cache --timeout=28800
+
+[difftool.code]
+	cmd = code --wait --diff $LOCAL $REMOTE
+
+[difftool.robe] 
+	cmd = /home/murvin/toolsetc/arbeit/roberteldersoftwarediff/roberteldersoftwarediff.py $REMOTE $LOCAL
+
+
+
+	

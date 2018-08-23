@@ -23,3 +23,8 @@ fi
 
 # left hand mouse
 xmodmap -e "pointer = 3 2 1"
+xmodmap -e "clear lock"
+setxkbmap -option caps:none
+# xset r rate 225 50
+xset r rate 225 60
+export SWT_GTK3=0
