@@ -1,0 +1,96 @@
+#+STARTUP: indent
+#+STARTUP: content
+##+STARTUP: overview
+#+STARTUP: hidestars
+#+TODO: ALT | NEU
+#+TODO: TODO(t) ALMOST(a) | almost(m) DONE(d)
+#+TODO: REPORT(r) BUG(b) KNOWNCAUSE(k) | FIXED(f)
+#+TODO: | CANCELED(c)
+
+
+* LVMs für Universal-Dilettanten
+** Diagramm
+   hda1   hdc1      (PV:s on partitions or whole disks)                        
+       \   /                                                                    
+        \ /                                                                     
+       diskvg        (VG)                                                       
+       /  |  \                                                                  
+      /   |   \                                                                 
+  usrlv rootlv varlv (LV:s)
+    |      |     |                                                              
+ ext2  reiserfs  xfs (filesystems)                                        
+** Partition mit der Partitions-ID 0x8e für LVM
+** Initializing disks or disk partitions
+pvcreate /Partition/
+** Creating a volume group
+vgcreate my_volume_group /Partition_1/ ... /Partition_N/
+** Creating a logical volume
+lvcreate -L 1500M -n testlv testvg
+mkfs -t ext2 /dev/testvg/testlv 
+mount /dev/testvg/testlv /mount-point/
+** Informationen über PV, VG und LV
+*** display
+nähere Details zu Physical Volumes, Volume Groups oder Logical Volumes
+ * pvdisplay 
+ * vgdisplay 
+ * lvdisplay 
+*** scan
+Das System nach LVM-Volumes etc. abzusuchen und aufzulisten:
+ * pvscan
+ * vgscan
+ * lvscan
+** Weitere
+*** Activating a volume group 
+vgchange -a y my_volume_group
+*** Removing a volume group
+vgchange -a n my_volume_group
+vgremove my_volume_group
+*** Adding physical volumes to a volume group
+vgextend my_volume_group /Partition/
+*** Removing physical volumes from a volume group
+vgreduce my_volume_group /Partition/
+*** Removing a logical volume
+umount /dev/myvg/homevol
+lvremove /dev/myvg/homevol
+*** Extending a logical volume
+lvextend -L12G /dev/myvg/homevol
+#oder
+lvextend -L+1G /dev/myvg/homevol
+#oder
+lvextend -l, --extents [+]LogicalExtentsNumber[%{VG|LV|PVS|FREE|ORIGIN}]
+
+umount /dev/myvg/homevol
+resize2fs /dev/myvg/homevol
+mount /dev/myvg/homevol /home
+
+*** Reducing a logical volume
+umount /home
+resize2fs /dev/myvg/homevol 512000   (entsp. 500MB)
+lvreduce -L-1G /dev/myvg/homevol
+mount /dev/myvg/homevol /home
+#oder
+umount /home
+e2fsadm -L-1G /dev/myvg/homevol
+mount /dev/myvg/homevol /home
+*** Taking a Backup Using Snapshots
+**** Create the snapshot volume
+lvcreate -L592M -s -n dbbackup /dev/ops/databases 
+**** Mount the snapshot volume
+mkdir /mnt/ops/dbbackup
+mount /dev/ops/dbbackup /mnt/ops/dbbackup
+**** Do the backup
+tar -cf /dev/rmt0 /mnt/ops/dbbackup
+**** Remove the snapshot
+umount /mnt/ops/dbbackup
+lvremove /dev/ops/dbbackup 
+*** Removing an Old Disk
+**** Distributing Old Extents to Existing Disks in Volume Group
+pvmove /dev/hdb
+**** Remove the unused disk
+vgreduce dev /dev/hdb
+
+* Forensic analysis (RO-Zugriff auf LVMs)
+sudo losetup -r -o $OFFSET /dev/loop1 image.raw
+vgchange -ay -pr $VOLUMEGROUP
+mount -o ro,loop /dev/mapper/$VOLUMEGROUP-$VOLUMENAME filesystem/
+

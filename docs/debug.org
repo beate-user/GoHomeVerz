@@ -1,0 +1,236 @@
+#+STARTUP: indent
+#+STARTUP: overview
+#+STARTUP: content
+#+STARTUP: hidestars
+##+TODO: ALT | NEU
+#+TODO: TODO(t) | DONE(d)
+##+TODO: TODO(t) ALMOST(a) | almost(m) DONE(d)
+##+TODO: REPORT(r) BUG(b) KNOWNCAUSE(k) | FIXED(f)
+##+TODO: | CANCELED(c)
+
+* dmesg
+dmesg - print or control the kernel ring buffer
+* DONE nm
+       nm - list symbols from object files
+
+       nm [-a|--debug-syms]
+          [-g|--extern-only][--plugin name]
+          [-B] [-C|--demangle[=style]] [-D|--dynamic]
+          [-S|--print-size] [-s|--print-armap]
+          [-A|-o|--print-file-name][--special-syms]
+          [-n|-v|--numeric-sort] [-p|--no-sort]
+          [-r|--reverse-sort] [--size-sort] [-u|--undefined-only]
+          [-t radix|--radix=radix] [-P|--portability]
+          [--target=bfdname] [-fformat|--format=format]
+          [--defined-only] [-l|--line-numbers] [--no-demangle]
+          [-V|--version] [-X 32_64] [--help]  [objfile...]
+
+* DONE objdump
+       objdump - display information from object files.
+
+       objdump [-a|--archive-headers]
+               [-b bfdname|--target=bfdname]
+               [-C|--demangle[=style] ]
+               [-d|--disassemble]
+               [-D|--disassemble-all]
+               [-z|--disassemble-zeroes]
+               [-EB|-EL|--endian={big | little }]
+               [-f|--file-headers]
+               [-F|--file-offsets]
+               [--file-start-context]
+               [-g|--debugging]
+               [-e|--debugging-tags]
+               [-h|--section-headers|--headers]
+               [-i|--info]
+               [-j section|--section=section]
+               [-l|--line-numbers]
+               [-S|--source]
+               [-m machine|--architecture=machine]
+               [-M options|--disassembler-options=options]
+               [-p|--private-headers]
+               [-P options|--private=options]
+               [-r|--reloc]
+               [-R|--dynamic-reloc]
+               [-s|--full-contents]
+               [-W[lLiaprmfFsoRt]|
+                --dwarf[=rawline,=decodedline,=info,=abbrev,=pubnames,=aranges,=macro,=frames,=frames-interp,=str,=loc,=Ranges,=pubtypes,=trace_info,=trace_abbrev,=trace_aranges,=gdb_index]]
+               [-G|--stabs]
+               [-t|--syms]
+               [-T|--dynamic-syms]
+               [-x|--all-headers]
+               [-w|--wide]
+               [--start-address=address]
+               [--stop-address=address]
+               [--prefix-addresses]
+               [--[no-]show-raw-insn]
+               [--adjust-vma=offset]
+               [--special-syms]
+               [--prefix=prefix]
+               [--prefix-strip=level]
+               [--insn-width=width]
+               [-V|--version]
+               [-H|--help]
+               objfile...
+
+* DONE strip
+       strip - Discard symbols from object files.
+
+       strip [-F bfdname |--target=bfdname]
+             [-I bfdname |--input-target=bfdname]
+             [-O bfdname |--output-target=bfdname]
+             [-s|--strip-all]
+             [-S|-g|-d|--strip-debug]
+             [-K symbolname |--keep-symbol=symbolname]
+             [-N symbolname |--strip-symbol=symbolname]
+             [-w|--wildcard]
+             [-x|--discard-all] [-X |--discard-locals]
+             [-R sectionname |--remove-section=sectionname]
+             [-o file] [-p|--preserve-dates]
+             [--keep-file-symbols]
+             [--only-keep-debug]
+             [-v |--verbose] [-V|--version]
+             [--help] [--info]
+             objfile...
+
+* addr2line
+
+* DONE readelf
+       readelf - Displays information about ELF files.
+
+       readelf [-a|--all]
+               [-h|--file-header]
+               [-l|--program-headers|--segments]
+               [-S|--section-headers|--sections]
+               [-g|--section-groups]
+               [-t|--section-details]
+               [-e|--headers]
+               [-s|--syms|--symbols]
+               [--dyn-syms]
+               [-n|--notes]
+               [-r|--relocs]
+               [-u|--unwind]
+               [-d|--dynamic]
+               [-V|--version-info]
+               [-A|--arch-specific]
+               [-D|--use-dynamic]
+               [-x <number or name>|--hex-dump=<number or name>]
+               [-p <number or name>|--string-dump=<number or name>]
+               [-R <number or name>|--relocated-dump=<number or name>]
+               [-c|--archive-index]
+               [-w[lLiaprmfFsoRt]|
+                --debug-dump[=rawline,=decodedline,=info,=abbrev,=pubnames,=aranges,=macro,=frames,=frames-interp,=str,=loc,=Ranges,=pubtypes,=trace_info,=trace_abbrev,=trace_aranges,=gdb_index]]
+               [--dwarf-depth=n]
+               [--dwarf-start=n]
+               [-I|--histogram]
+               [-v|--version]
+               [-W|--wide]
+               [-H|--help]
+               elffile...
+
+* DONE strace
+       strace - trace system calls and signals
+
+       strace  [ -CdffhiqrtttTvxx ] [ -acolumn ] [ -eexpr ] ...  [ -ofile ] [ -ppid ] ...  [ -sstrsize ]
+       [ -uusername ] [ -Evar=val ] ...  [ -Evar ] ...  [ command [ arg ...  ] ]
+
+       strace -c [ -eexpr ] ...  [ -Ooverhead ] [ -Ssortby ] [ command [ arg ...  ] ]
+
+       *-f -ff*
+
+* DONE ltrace
+       ltrace - A library call tracer
+
+       ltrace  [-CfhiLrStttV]  [-a column] [-A maxelts] [-D level] [-e expr] [-l filename] [-n nr] [-o filename] [-p
+       pid] ... [-s strsize] [-u username] [-X extern] [-x extern] ... [--align=column] [--debug=level] [--demangle]
+       [--help] [--indent=nr] [--library=filename] [--output=filename] [--version] [command [arg ...]]
+
+* DONE LD_PRELOAD (interposition)
+ * LD_PRELOAD=/home/jay/libjmalloc.so ./foo
+ * #define _GNU_SOURCE
+   #include <stdio.h>
+   #include <stdint.h>
+   #include <dlfcn.h>
+   
+   void* malloc(size_t size)
+   {
+       static void* (*real_malloc)(size_t) = NULL;
+       if (!real_malloc)
+           real_malloc = dlsym(RTLD_NEXT, "malloc");
+   
+       void *p = real_malloc(size);
+       fprintf(stderr, "malloc(%d) = %p\n", size, p);
+       return p;
+   }
+
+ We compile this with:
+ gcc -shared -ldl -fPIC jmalloc.c -o libjmalloc.so
+*
+
+* DONE ldd
+       ldd - print shared library dependencies
+
+       ldd [OPTION]...  FILE...
+
+* DONE semaphore
+ipcs
+
+* DONE LD_DEBUG
+ * LD_DEBUG
+   Output verbose debugging information about the dynamic linker.  If set to `all' prints all
+   debugging  information  it  has,  if set to `help' prints a help message about which cate‐
+   gories can be specified in this environment variable.
+
+ * LD_DEBUG_OUTPUT
+   File where LD_DEBUG output should be fed into, default is standard output. LD_DEBUG_OUTPUT
+   is ignored for setuid/setgid binaries.
+
+* gdb
+
+* gdbtui
+
+* DONE cordump
+** wo werden dumps geschrieben
+ * cat /proc/sys/kernel/core_pattern
+ * sysctl kernel.core_pattern=/tmp/core.%e.%p.%t
+** aktivieren/de-
+ * ulimit -c unlimited
+ * ulimit -c 0
+
+* DONE intrumentation
+ * compiling the code with the -finstrument-functions
+   * void __cyg_profile_func_enter(void *func, void *callsite);
+   * void __cyg_profile_func_exit(void *func, void *callsite);
+
+* TODO valgrind
+** cachegrind -> kcachegrind
+*** callgrind 
+** helgrind
+** memcheck
+** massif
+
+* oprofile
+
+* DONE gprof
+       gprof - display call graph profile data
+
+       gprof [ -[abcDhilLrsTvwxyz] ] [ -[ACeEfFJnNOpPqQZ][name] ]
+        [ -I dirs ] [ -d[num] ] [ -k from/to ]
+        [ -m min-count ] [ -R map_file ] [ -t table-length ]
+        [ --[no-]annotated-source[=name] ]
+        [ --[no-]exec-counts[=name] ]
+        [ --[no-]flat-profile[=name] ] [ --[no-]graph[=name] ]
+        [ --[no-]time=name] [ --all-lines ] [ --brief ]
+        [ --debug[=level] ] [ --function-ordering ]
+        [ --file-ordering map_file ] [ --directory-path=dirs ]
+        [ --display-unused-functions ] [ --file-format=name ]
+        [ --file-info ] [ --help ] [ --line ] [ --min-count=n ]
+        [ --no-static ] [ --print-path ] [ --separate-files ]
+        [ --static-call-graph ] [ --sum ] [ --table-length=len ]
+        [ --traditional ] [ --version ] [ --width=n ]
+        [ --ignore-non-functions ] [ --demangle[=STYLE] ]
+        [ --no-demangle ] [--external-symbol-table=name]
+        [ image-file ] [ profile-file ... ]
+* terminal-multiplexer
+** screen
+** tmux
+** byobu

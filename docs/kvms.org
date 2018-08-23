@@ -1,0 +1,47 @@
+#+STARTUP: indent
+#+STARTUP: content
+##+STARTUP: overview
+#+STARTUP: hidestars
+##+TODO: ALT | NEU
+#+TODO: o?????o TODO(t) ALMOST(a) | almost(m) DONE(d) OK
+##+TODO: REPORT(r) BUG(b) KNOWNCAUSE(k) | FIXED(f)
+##+TODO: | CANCELED(c)
+
+
+* KVMs für Universal-Dilettanten
+** Image anlegen
+qemu-img create -f qcow2 ReactOS.img 5G
+** VM starten
+qemu-system-i386 -m 512 -hda ReactOS.img -cdrom ReactOS.iso -boot d
+*** Skript
+**** Normal
+#!/bin/sh
+#This script created by AQEMU
+IMAGE=./temp.ovl
+CDR=/home/murvin/vms/ubuntu-12.04-desktop-amd64.iso
+PARAM="-m 2048 -hda "$IMAGE" -cdrom "$CDR" -boot c "$*" -net nic -net user,hostfwd=tcp::12222-:22 -usbdevice tablet -k de"       
+echo $PARAM
+#DISPLAY= kvm $PARAM </dev/null >/dev/null 2>&1
+nice kvm $PARAM
+**** VNC
+#!/bin/sh                                                                                                                        
+#This script created by AQEMU
+IMAGE=./temp.ovl
+CDR=/home/murvin/vms/ubuntu-12.04-desktop-amd64.iso
+PARAM="-m 2048 -hda "$IMAGE" -cdrom "$CDR" -boot c "$*" -net nic -net user,hostfwd=tcp::12222-:22 -usbdevice tablet -k de -vga vmware -vnc :44"
+echo $PARAM
+DISPLAY= kvm $PARAM </dev/null >/dev/null 2>&1
+#nice kvm $PARAM
+
+
+
+
+
+
+
+
+
+
+
+
+    

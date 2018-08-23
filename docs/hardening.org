@@ -1,0 +1,173 @@
+#+STARTUP: indent
+#+STARTUP: overview
+#+STARTUP: content
+#+STARTUP: hidestars
+#+TODO: ALT | NEU
+#+TODO: TODO(t) ALMOST(a) | almost(m) DONE(d)
+#+TODO: REPORT(r) BUG(b) KNOWNCAUSE(k) | FIXED(f)
+#+TODO: | CANCELED(c)
+
+
+
+* Nach der Installation
+** Ausführen von Sicherheitsaktualisierungen
+ * aptitude update
+ * aptitude upgrade
+** TODO Sicherheitsaktualisierung des Kernels
+     $ dpkg -S `readlink -f /vmlinuz`
+     linux-image-2.6.18-4-686: /boot/vmlinuz-2.6.18-4-686
+
+     $ COLUMNS=150 dpkg -l 'linux-image*' | awk '$1 ~ /ii/ { print $0 }'
+
+     $ kernfile=`readlink -f /vmlinuz`
+     $ kernel=`dpkg -S $kernfile | awk -F : '{print $1}'`
+     $ apt-cache policy $kernel
+     linux-image-2.6.18-4-686:
+       Installiert: 2.6.18.dfsg.1-12
+       Installationskandidat: 2.6.18.dfsg.1-12
+       Versionstabelle:
+      *** 2.6.18.dfsg.1-12 0
+             100 /var/lib/dpkg/status
+** Einschränkung der Anmeldemöglichkeiten an der Konsole
+*** /etc/pam.d/login [20] aktiviert das Modul pam_securetty.so
+*** /etc/securetty
+ * entfernen Sie oder fügen Sie Terminals hinzu, auf denen sich Root anmelden darf
+ * nur lokalen Zugang:
+   * console, ttyX und vc/X
+   * Anzahl der Konsolen und Schnittstellen in /etc/inittab überprüfen 
+** Einschränkung des System-Neustarts von der Konsole aus
+ * /etc/inittab + /etc/shutdown.allow
+   ca:12345:ctrlaltdel:/sbin/shutdown -t1 -a -r now
+ * ls -ls /lib/systemd/system/ctrl-alt-del.target
+** Einschränkung der Tastenkombination Magische S-Abf
+ * $ cat /proc/sys/kernel/sysrq 
+     438
+ *  /etc/sysctl.conf bearbeiten und folgende Zeile einfügen:
+     # Schaltet die Magische S-Abf-Taste ab
+     kernel.sysrq = 0
+** Partitionen auf die richtige Art einhängen
+ * /etc/fstab
+    /dev/hda7    /tmp    ext2    defaults,nosuid,noexec,nodev    0    2
+*** /tmp noexec setzen
+*** /usr auf nur-lesend setzen
+*** /etc/apt/apt.conf bearbeiten und Folgendes einfügen:
+       DPkg
+       {
+           Pre-Invoke  { "mount /usr -o remount,rw" };
+           Post-Invoke { "mount /usr -o remount,ro" };
+       };
+** Den Benutzerzugang absichern
+*** Benutzerauthentifizierung: PAM
+*** Passwortsicherheit in PAM
+**** /etc/pam.d/common-password + /etc/pam.d/passwd
+password   [success=1 default=ignore]      pam_unix.so nullok obscure minlen=8 sha512
+**** Steuerung des Benutzerzugangs in PAM / /etc/pam.d/login
+auth     requisite  pam_securetty.so
+**** Steuerung von su in PAM
+ * /etc/pam.d/su/
+    auth        requisite   pam_wheel.so group=wheel debug
+**** Konfiguration für nicht definierte PAM-Anwendungen
+ * /etc/pam.d/other :
+       auth     required       pam_securetty.so
+       auth     required       pam_unix_auth.so
+       auth     required       pam_warn.so
+       auth     required       pam_deny.so
+       account  required       pam_unix_acct.so
+       account  required       pam_warn.so
+       account  required       pam_deny.so
+       password required       pam_unix_passwd.so
+       password required       pam_warn.so
+       password required       pam_deny.so
+       session  required       pam_unix_session.so
+       session  required       pam_warn.so
+       session  required       pam_deny.so
+**** Aktionen bei der Benutzeranmeldung
+ * /etc/login.defs
+       FAILLOG_ENAB        yes
+       LOG_UNKFAIL_ENAB    no
+       SYSLOG_SU_ENAB      yes
+       SYSLOG_SG_ENAB      yes
+       ENCRYPT_METHOD  SHA512
+**** Aktionen bei der Benutzeranmeldung
+ * /etc/pam.d/login
+    auth       optional   pam_faildelay.so  delay=3000000
+**** Verwendung von Sudo
+ * /etc/sudoers 
+**** Administrativen Fernzugriff verweigern
+ * /etc/security/access.conf
+        -:wheel:ALL EXCEPT LOCAL
+
+
+** Absichern von ssh
+*** /etc/ssh/sshd_config
+ * ListenAddress 192.168.0.1
+ * PermitRootLogin no
+ * Port 666 oder ListenAddress 192.168.0.1:666
+ * PermitEmptyPasswords no
+ * AllowUsers alex ref ich@irgendwo
+ * AllowGroups wheel admin
+ * PasswordAuthentication yes
+ * Protocol 2
+ * Banner /etc/eine_Datei
+*** /etc/loginusers + /etc/pam.d/ssh:
+ * auth       required     pam_listfile.so sense=allow onerr=fail item=user file=/etc/loginusers
+
+
+** Firewall
+*** /etc/rc.local
+#!/bin/sh
+# Before the exit 0. Will be launched at boot time.
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+set -e
+# Launch my netfilter rules
+if [ -e '/etc/firewall_example.sh' ]
+then
+    /bin/sh '/etc/firewall_example.sh'
+fi
+exit 0
+
+*** /etc/network/interfaces
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+# The loopback network interface
+auto  lo
+iface lo inet loopback
+# WAN cablemodem
+allow-hotplug eth0
+iface         eth0 inet dhcp
+              pre-up    /bin/sh /etc/firewall/enable.sh
+              post-down /bin/sh /etc/firewall/disable.sh
+
+*** Example: Basic standalone machine firewall
+#!/bin/sh
+# A very basic IPtables / Netfilter script
+PATH='/sbin'
+# Flush the tables to apply changes
+iptables -F
+# Default policy to drop 'everything' but our output to internet
+iptables -P FORWARD DROP
+iptables -P INPUT   DROP
+iptables -P OUTPUT  ACCEPT
+# Allow established connections (the responses to our outgoing traffic)
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+# Allow local programs that use loopback (Unix sockets)
+iptables -A INPUT -s 127.0.0.0/8 -d 127.0.0.0/8 -i lo -j ACCEPT
+# Uncomment this line to allow incoming SSH/SCP conections to this machine,
+# for traffic from 10.20.0.2 (you can use also use a network definition as
+# source like 10.20.0.0/22).
+iptables -A INPUT -s 10.20.0.2 -p tcp --dport 22 -m state --state NEW -j ACCEPT
+
+
+* Quellen/Links
+ * https://www.debian.org/doc/manuals/securing-debian-howto/ch4.de.html
+ * 

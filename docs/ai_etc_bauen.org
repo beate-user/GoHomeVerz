@@ -1,0 +1,190 @@
+#+STARTUP: indent
+#+STARTUP: content
+#+STARTUP: hidestars
+#+TODO: ALT | NEU
+#+TODO: TODO(t) ALMOST(a) | almost(m) DONE(d)
+#+TODO: REPORT(r) BUG(b) KNOWNCAUSE(k) | FIXED(f)
+#+TODO: | CANCELED(c)
+
+* anderes
+** Systeminfos
+*** smartctl -a /dev/sda
+*** lspci -vvv
+** Netzwerküberwachung
+*** curl 
+*** tcpdump -i interfac -s0 -w out.f port #
+*** tcpflow -r out.f
+*** tcpdump -s 512 -XX -i any dst 127.0.0.1 and port 25|tee /tmp/deb.txt
+** ohne terminal starten
+ * DISPLAY= xxx </dev/null >/dev/null 2>&1
+ * nuhup
+** forward X11 after su to root
+Perform the following steps on the SSH Tectia Server side:
+ 1. Check the $DISPLAY variable of the non-privileged user:
+     > *echo $DISPLAY*
+     SSH_SERVER_IP:10.0
+ 2. su to root
+     > *su - root*
+     Password:
+ 3. By default xauth will look into the user's home directory
+    for the .Xauthority file. Change or create the
+    $XAUTHORITY variable to point to the .Xauthority file of
+    the non-privileged user. For example in zsh or bash:
+     > *export XAUTHORITY=/home/user/.Xauthority*
+    
+    Change or create the $DISPLAY variable to match the
+    $DISPLAY of the non-privileged user. For example 
+    in zsh or bash:
+     > *export DISPLAY=SSH_SERVER_IP:10.0*
+
+    In case the environment is not reset for root 
+    (su root), you will not have to export the 
+    $DISPLAY variable as it remains the same.
+** ssh-Tunnel
+ * ssh -N -L 55556:localhost:55556 eddy@10.160.88.96
+   * ssh -L [bind_address:]port:host:hostport [user@]hostname [command]
+   * -L [bind_address:]port:host:hostport
+     -L [bind_address:]port:remote_socket
+     -L local_socket:host:hostport
+     -L local_socket:remote_socket
+
+     Specifies that the given *port on the local (client) host is to* 
+     *be forwarded to the given host and port on the remote side*.  
+     This works by allocating a socket to listen to port on the 
+     local side, optionally bound to the specified bind_address.
+     Whenever a connection is made to this port, the connection is 
+     forwarded over the secure channel, and a connection is made to
+     host port hostport from the remote machine.  Port forwardings
+     can also be specified in the configuration file.  IPv6 
+     addresses can be specified with an alternative 
+     syntax: [bind_address/]port/host/hostport or by enclosing 
+     the address in square brackets.  Only the superuser can forward 
+     privileged ports.  By default, the local port is bound in 
+     accordance with the GatewayPorts setting.  However, an explicit 
+     bind_address may be used to bind the connection to a specific 
+     address.  The bind_address of “localhost” indicates that the 
+     listening port be bound for local use only, while an empty 
+     address or ‘*’ indicates that the port should be available 
+     from all interfaces.
+   * -R [bind_address:]port:host:hostport
+     -R [bind_address:]port:local_socket
+     -R remote_socket:host:hostport
+     -R remote_socket:local_socket
+     
+     Specifies that connections to the given TCP port or Unix socket on the remote (server)
+     host are to be forwarded to the given host and port, or Unix socket, on the local side.
+     This works by allocating a socket to listen to either a TCP port or to a Unix socket on
+     the remote side.  Whenever a connection is made to this port or Unix socket, the connec‐
+     tion is forwarded over the secure channel, and a connection is made to either host port
+     hostport, or local_socket, from the local machine.
+     
+     Port forwardings can also be specified in the configuration file.  Privileged ports can
+     be forwarded only when logging in as root on the remote machine.  IPv6 addresses can be
+     specified by enclosing the address in square brackets.
+     
+     By default, TCP listening sockets on the server will be bound to the loopback interface
+     only.  This may be overridden by specifying a bind_address.  An empty bind_address, or
+     the address ‘*’, indicates that the remote socket should listen on all interfaces.
+     Specifying a remote bind_address will only succeed if the server's GatewayPorts option
+     is enabled (see sshd_config(5)).
+     
+     If the port argument is ‘0’, the listen port will be dynamically allocated on the server
+     and reported to the client at run time.  When used together with -O forward the allo‐
+     cated port will be printed to the standard output.
+   * -N      Do not execute a remote command.  This is useful for just forwarding ports.
+   * -f      Requests ssh to go to background just before command execution.  This is useful if ssh
+             is going to ask for passwords or passphrases, but the user wants it in the background.
+             This implies -n.  The recommended way to start X11 programs at a remote site is with
+             something like ssh -f host xterm.
+
+             If the ExitOnForwardFailure configuration option is set to “yes”, then a client started
+             with -f will wait for all remote port forwards to be successfully established before
+             placing itself in the background.
+   * -n      Redirects stdin from /dev/null (actually, prevents reading from stdin).  This must be
+             used when ssh is run in the background.  A common trick is to use this to run X11 pro‐
+             grams on a remote machine.  For example, ssh -n shadows.cs.hut.fi emacs & will start an
+             emacs on shadows.cs.hut.fi, and the X11 connection will be automatically forwarded over
+             an encrypted channel.  The ssh program will be put in the background.  (This does not
+             work if ssh needs to ask for a password or passphrase; see also the -f option.)
+   * -g      Allows remote hosts to connect to local forwarded ports.  If used on a multiplexed con‐
+             nection, then this option must be specified on the master process.
+     
+** cordump
+*** wo werden dumps geschrieben
+ * cat /proc/sys/kernel/core_pattern
+ * sysctl kernel.core_pattern=/tmp/core.%e.%p.%t
+*** aktivieren/de-
+ * ulimit -c unlimited
+ * ulimit -c 0
+     
+** chroot
+ * mount /dev/sda1 /mnt
+ * mount /dev/sda2 /mnt/bin/
+ * mount -o bind /dev /mnt/dev
+ * mount -o bind /dev/shm /mnt/dev/shm
+ * mount -o bind /proc /mnt/proc
+ * mount -o bind /sys /mnt/sys
+ * mount -o bind /dev/pts /mnt/dev/pts/
+ * chroot /mnt /bin/bash
+** grub
+*** Beschreibung
+ * /etc/grub.d/ - 
+   This new directory contains GRUB scripts. These scripts 
+   are building blocks from which the grub.cfg file is built. 
+   When the relevant GRUB command is executed, the scripts 
+   are read in a certain sequence and grub.cfg is created.
+ * /etc/default/grub - 
+   This file contains the GRUB menu settings that are read 
+   by the GRUB scripts and written into grub.cfg. It is the 
+   customization part of the GRUB, similar to the old menu.lst,
+   except the actual boot entries. 
+ * How GRUB 2 works?
+   GRUB 2 works like this:
+   /etc/default/grub contains customization; 
+   /etc/grub.d/ scripts contain GRUB menu information and
+   operating system boot scripts. When the update-grub command 
+   is run, it reads the contents of the grub file and the
+   grub.d scripts and creates the grub.cfg file.
+   That's all. 
+ * new Script
+   #!/bin/sh -e
+   echo "Adding my custom Linux to GRUB 2"
+   cat << EOF
+   menuentry "My custom Linux" {
+   set root=(hd0,5)
+   linux /boot/vmlinuz
+   initrd /boot/initrd.img
+   }
+   EOF 
+ * update-grub
+ * grub-install <target> 
+ * sh -x /usr/sbin/grub-mkconfig -o /boot/grub/grub.cfg
+*** HTML-Seite
+[[file:GRUB.htm]]
+
+** ssh tar pipe (et al)
+*** backup
+tar zcvf - /wwwdata | ssh root@192.168.1.201 "cat > /backup/wwwdata.tar.gz"
+*** restore
+ssh root@192.168.1.201 "cat /backup/wwwdata.tar.gz" | tar zxvf - 
+** rsync über ssh 
+rsync -azv -e "ssh -l murvin -i /root/.ssh/rsyncer" /mnt/exc/homebackup/home/mk.sav murvin@ld7678.wdf.sap.corp:~/myNback/exc/ >> $LOGFILE &
+rsync -azv -e "ssh -l UID -i IDFILE" SRC DST >> $LOGFILE &
+ * SRC / DST
+   [UID@HOST:]PATH
+
+** Mail formatieren
+ * "> "
+ * set-fill-prefix (mit mariertem text)
+ * set-fill-colum -> 80
+ * set-justification-full
+ * fill-region-as-paragraph
+** ssh-agent
+eval `ssh-agent -s`
+** git diff zwischen zwei commits und so........
+cd ~/net/ai-git-qs/; git submodule foreach ' git mk-log-long "4.1.20-RC2".."origin/4.1.20.x" ;echo;echo ||: ' > /tmp/deb.txt;cp /tmp/deb.txt /tmp/deb2.txt;vim /tmp/deb2.txt 
+sed -e "s/\(#[[:digit:]]\+\)/\n\1\n/g" /tmp/deb.txt |grep "#"|sort -u
+
+
+
+

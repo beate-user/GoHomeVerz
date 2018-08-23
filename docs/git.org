@@ -1,0 +1,552 @@
+#+STARTUP: indent
+#+STARTUP: overview
+#+STARTUP: content
+#+STARTUP: hidestars
+#+TODO: ALT | NEU
+#+TODO: TODO(t) ALMOST(a) | almost(m) DONE(d)
+#+TODO: REPORT(r) BUG(b) KNOWNCAUSE(k) | FIXED(f)
+#+TODO: | CANCELED(c)
+
+
+Es wird davon ausgegangen, dass der Leser Grundkenntnisse im 
+Umgang mit Git hat. Es gibt genügend Ressourcen im Internet, 
+wo diese leicht verständlich erklärt werden. Es sollen hier 
+eher weiterführende Lösungsansätze und Tricks rund um Git 
+gesammelt werden.
+
+* Info
+** Diffs
+*** Stage <-> WkSpc
+git diff [--options] [--] [<path>...]
+
+This form is to view the changes you made relative to the index
+(staging area for the next commit). In other words, the differences
+are what you could tell git to further add to the index but you
+still haven’t.
+If exactly two paths are given, and at least one is untracked,
+compare the two files / directories. This behavior can be forced by
+--no-index.
+*** Commit <-> Stage
+git diff [--options] --cached [<commit>] [--] [<path>...]
+
+This form is to view the changes you staged for the next commit
+relative to the named <commit>. Typically you would want comparison
+with the latest commit, so if you do not give <commit>, it defaults
+to HEAD. --staged is a synonym of --cached.
+*** Commit <-> WkSpc
+git diff [--options] <commit> [--] [<path>...]
+
+This form is to view the changes you have in your working tree
+relative to the named <commit>. You can use HEAD to compare it with
+the latest commit, or a branch name to compare with the tip of a
+different branch.
+*** Commit1 <-> Commit2 (git diff <commit> <commit>)
+git diff [--options] <commit1> <commit2> [--] [<path>...]
+
+This is to view the changes between two arbitrary <commit>.
+*** Commit <-> Commit (git diff <commit>..<commit>)
+git diff [--options] <commit>..<commit> [--] [<path>...]
+
+This is synonymous to the previous form. If <commit> on one side is
+omitted, it will have the same effect as using HEAD instead.
+*** Änderungen auf branch(2) seit branch(1)
+git diff [--options] <commit>...<commit> [--] [<path>...]
+
+This form is to view the changes on the branch containing and up to
+the second <commit>, starting at a common ancestor of both
+<commit>. "git diff A...B" is equivalent to "git diff
+$(git-merge-base A B) B". You can omit any one of <commit>, which has
+the same effect as using HEAD instead.
+** Alle Dateien im Repo anzeigen
+git ls-tree master
+git ls-files
+** Commits und Dateien anzeigen
+git log --name-status
+git log --name-only
+** Letzte Änderungen am Repository ansehen
+git reflog
+** Status
+git status
+Zeige Dateien, die in den Stage hinzugefügt wurden, 
+Dateien mit Änderungen und ungetrackte Dateien im Arbeitsverzeichnis.
+** In Dateien suchen
+git grep "foo()"
+Durchsucht alle getrackten Dateien nach foo().
+** Zeige Diff eines bestimmten Commits
+git show <rev>
+Zeige Änderungen, die durch <rev> eingeführt wurden. <rev> 
+kann eine Commit ID, ein Branch Name oder Tag sein. Default ist HEAD.
+** Zeige Dateien, die ein Commit ändert
+git show --name-only <rev>
+** Zeige, wer was in einer Datei geändert hat
+git blame <file>
+git gui blame <file>
+** Zeige Commits, die eine bestimmte Datei verändert haben
+git whatchanged <file>
+Die aktuellsten Commits zuerst.
+** Inhalt eines Files anzeigen
+git show branch:file
+
+* Submodules
+** Ein Repository hinzufügen
+git submodule add <remote_repository> <path/to/submodule>
+Fügt das Repository unter <path/to/submodule> als Submodule
+hinzu. Wird beim nächsten Commit übernommen.
+** Registrierte Submodule aktualisieren
+git submodule update [--init]
+Klont beispielsweise fehlende submodule und checkt den
+richtigen Commit aus dem Super-Repository aus. --init ist 
+beim Ersten Mal nötig.
+** Kommando für jedes Submodul ausführen
+git submodule foreach <command>
+Führt das git <command> in jedem ausgecheckten submodul aus.
+** Submodule entfernen
+   1. Die jeweilige Zeile aus .gitmodules löschen.
+   2. Die relevante Section aus .git/config löschen.
+   3. git rm --cached <path_to_submodule> (ohne abschließendes /) ausführen.
+   4. Commiten und die jetzt ungetrackten submodule Dateien löschen.
+
+* Adding / Deleting
+** Entferne alle gelöschten Dateien vom Repository
+git rm $(git ls-files --deleted)
+** Entfernen von gestageten Dateien vom Index, aber nicht vom Dateisystem.
+git rm --cached <file1> <file2> ...
+** Löschen untracked
+git clean [-d] [-f] [-n] [-q] [-e <pattern>] [-x | -X] [--] <path>…
+-d             Remove untracked directories in addition to untracked files. If an untracked directory is managed by a different git repository, it is not removed by default. Use -f option twice if you really want to remove such a directory.
+-n --dry-run   Don’t actually remove anything, just show what would be done.
+-x             Don’t use the ignore rules. This allows removing all untracked files, including build products. This can be used (possibly in conjunction with git reset) to create a pristine working directory to test a clean build.
+-X             Remove only files ignored by git. This may be useful to rebuild everything from scratch, but keep manually created files.
+
+* Staging
+** Interaktives Hinzufügen von Dateien in den Stage
+git add -i
+** Dateien aus dem nächsten Commit entfernen
+git reset HEAD <file1> <file2> ...
+
+* Committing
+** Die Commit Nachricht des letzten Commits ändern und sonst nichts
+git commit --amend
+** Den letzten Commit fixen, einschließlich den Änderungen an bestimmten Dateien
+git commit --amend <file1> <file2> ...
+ACHTUNG: Ausführen, nachdem die Dateien berichtigt wurden.
+Statt die einzelnen Dateien anzugeben können mit -a Änderungen
+an allen getrackten Dateien übernommen werden.
+** Version markieren
+git tag v1.0
+Taggt aktuelles Commit als v1.0
+
+* Branches
+** Neuen branch erstellen und gleichzeitig auschecken
+git checkout -b <new> <start-point>
+Erstellt einen neuen branch <new> ausgehend von
+ <start-point> und checkt ihn aus.
+** Zeige alles lokalen und remote Branches
+git branch -a
+** Tracking branch erstellen, um von Upstream zu pushen/pullen
+git branch --track <branch> <remote-branch>
+Beispiel: git branch --track experimental origin/experimental
+** Neuen Branch erstellen und Upstream veröffentlichen
+ * git branch <local branch name>
+	 Neuen lokalen Branch erstellen.
+ * git push origin <local branch name>
+	 Branch Upstream veröffentlichen
+ * git checkout master
+	 git branch -f <local branch name> origin/<remote branch name>
+	 Leider fehlt noch der remote tracking Branch, aber durch 
+	 dieses Kommando wird er automatisch erstellt.
+** Lokalen, gemergten branch löschen
+git branch -d <branch>
+** Lokalen, ungemergten branch löschen
+git branch -D <branch>
+Löscht den Branch, obwohl es darin noch ungemergte commits gibt.
+** Branch im Upstream (remote) Repository löschen
+git push <repository> :<branch>
+Beispiel: git push origin :old_branch_to_be_deleted
+** Lokalen tracking branch löschen
+git branch -r -d <remote-branch>
+Löscht den tracking branch von lokalen repo.
+Beispiel: git branch -r -d wycats/master
+** Eine Datei eines anderen Branches auschecken
+git checkout <branch> <path to new file>
+Checkt eine Datei eines anderen Branches im aktuellen
+Branch aus. Ist die Datei noch nicht im Index des
+aktuellen Branches muss noch git add <path to new file> 
+ausgeführt werden um es aufzunehmen.
+Beispiel: git checkout somebranch abc/testfile.txt
+** Inhalt von Dateien von einer anderen Branch anzeigen
+git show <branch> -- <path to file that does not exist>
+Beispiel: git show remote_tick702 -- path/to/fubar.txt
+Datei darf nicht im aktuellen Branch existieren.
+
+* Mergen
+** Branch in aktuellen Branch mergen
+git merge <branch>
+** Branch mergen, ohne automatischen Commit
+git merge <branch> --no-commit
+
+* Konflikte
+** Konflikte mit einem Mergetool beseitigen
+   1. git mergetool
+      Funktioniert nur bei Textdateien.
+      *local* ist der aktuelle Zweig
+      *remote* der reinge-merged-e Zweig
+   2. git add <file1> [<file2> ...]
+      Geänderte Dateien dem Stage hinzufügen.
+   3. git rebase --continue
+      Nach Konfliktauflösung Merge fortsetzen.
+** Merge-Konflikt mit eigenen Änderungen vergleichen
+git diff --ours <file>
+** Konflikt-Patch verwerfen
+git reset --hard && git rebase --skip
+
+* Stashing
+** Nicht Commitete Änderungen zwischenspeichern
+git stash
+git stash save <optional-name>
+Speichert lokale Modifikationen in einem neuen Stash zwischen um beispielsweise git pull auszuführen.
+** Änderungen aus dem Stash zurückspielen
+git stash apply
+** Änderungen aus dem letzten Stash zurückspielen und aus dem 
+Stash entfernen
+git stash pop
+** Auflisten der aktuellen Stashes
+git stash list
+** Zeigt den Inhalt eines Stashes
+git stash show <stash-name> -p
+** Stash löschen
+git stash drop [<stash-name>]
+** Alle Stashes löschen
+git stash clear
+
+* Zurückkehren
+** Commit zurücknehmen als Änderung commiten
+git revert <rev>
+** Datei neu auschecken und lokale Änderungen überschreiben
+git checkout <file>
+** Alle getrackten Dateien neu auschecken und lokale Änderungen überschreiben
+git checkout .
+
+* Fehler bereinigen / Undo
+** Änderungen seit dem letzten Commit aufgeben
+git reset --hard
+ACHTUNG: Kann nicht rückgängig gemacht werden. Wenn ein Merge
+fehlschlägt und man den Merge rückgängig machen will, macht
+dass das Kommando.
+** Den letzen ERFOLGREICHEN Merge und alle Änderungen seitdem zurücknehmen
+git reset --hard ORIG_HEAD
+GEFÄHRLICH?. Nützlich, wenn man den letzten Merge rückgängig machen will.
+** Letzen Commit zurücknehmen, aber dessen Änderungen stagen
+git reset --soft HEAD^
+Wenn man etwas im letzen Commit vergessen hat.
+** Vorherigen Commit berichtigen, einschließlich den Änderungen seitdem
+
+git commit --amend
+
+* Konfiguration
+** .git/config (oder ~/.gitconfig) in $EDITOR bearbeiten
+git config -e [--global]
+** Commiter Name und eMailadresse einstellen
+git config --global user.name 'Dein Name'
+git config --global user.email devel@domain.tld
+** Farbige Ausgaben aktivieren
+git config --add color.ui "auto"
+** Merge Tool festlegen (zb. meld)
+git config --global merge.tool [tool]
+** Repository Beschreibung festlegen
+vim .git/description
+			
+* Patches
+** Den letzten Commit als Patch ausgeben
+git format-patch HEAD^
+Kann mit git am wieder angewandt werden.
+** Patch für andere Entwickler (Upstream) erstellen
+git format-patch origin
+** Anwenden eines von format-patch erzeugten Patches
+git am <patch file>
+** Patch erstellen, der mit patch -p0 < patchfile angewandt werden kann
+git diff --no-prefix > patchfile
+
+* Aliase
+Ich persönlich bin kein großer Fan von Aliasen für Git. Es besteht die Gefahr, dass man sich mit der Zeit zu sehr an die Aliase gewöhnt und die Grundbefehle vergisst. Deswegen rate ich sie sparsam einzusetzen.
+** Grafische Ausgabe des Logs in der Konsole
+git config --global alias.show-graph 'log --graph --abbrev-commit --pretty=oneline'
+
+* Cherry-Picking
+** Wähle einen einzelnen Commit eines anderen lokalen Branches zum mergen aus
+git cherry-pick [--edit] [-n] [-m parent-number] [-s] [-x] <commit>
+Beispiel: git cherry-pick 7300a6130d
+
+* Quetschen
+** Quetscht die letzten 10 Commits in ein großes Commit
+git rebase --interactive HEAD~10
+Dann alle ausser des ersten “pick” zu “squash” ändern.
+
+* Sharing
+** Änderungen von Upstream holen und in ausgecheckten Branch mergen
+git pull
+Notiz: .git/config muss eine [branch “some_name”] Sektion
+für den aktuellen Branch haben, damit git weiß in welchem 
+remote tracking Branch es den aktuellen Branch mergen soll. 
+Git 1.5.3 und neuer machen das automatisch.
+git fetch macht das gleiche ohne merge.
+** Änderungen upstream pushen
+git push
+Aktualisiert alle Upstream Branches, die lokal UND upstream
+existieren mit den lokalen Änderungen.
+** Änderungen an einer Branch upstream pushen
+git push origin <branch>
+Aktualisiert nur den angegebenen Branch im Upstream Repository. 
+Das ist immer dann unbedingt nötig, wenn man neue Branches 
+mit Upstream teilen will. Danach reicht ein einfaches git push.
+git push origin <branch>:refs/heads/<branch> macht dasselbe.
+
+* Remotes
+** Repository klonen
+git clone ssh://user@host.org/project.git
+Default Protokoll ist ssh:.
+** Durch klonen neues Upstream Repository erstellen
+git clone --bare ssh://user@host/project.git
+** Remote Repository in die git config eintragen
+git remote add <remote> <remote_URL>
+Danach kann mit git pull vom remote Repository gepullt werden.
+Beispiel:
+   1. git remote add coreteam git://github.com/wycats/merb-plugins.git
+   2. git pull coreteam
+** Branch upstream löschen
+git push <reository> :<branch>
+** Branch upstream erstellen
+git push <reository> <local_src>:<remote_dst>
+** Branch upstream überschreiben
+git push <repository> +<local_src>:<remote_dst>
+This can leave unreferenced commits dangling in the origin repository.
+** Stutzen (prune)
+git remote prune <remote>
+Entfernt gelöschte remote-tracking Branches aus dem git branch -r listing.
+** Ein Remote hinzufügen und dessen master tracken
+git remote add -t master -m master origin git://example.com/git.git/
+** Informationen über Remote anzeigen
+git remote show <remote>.
+Beispiel: git remote show origin
+** Upstream Branch lokal tracken
+git checkout -b <local branch> <remote>/<remote branch>
+Beispiel: git checkout -b myfeature origin/myfeature
+** Non-fastforward Commits
+   1. git pull <remote> <branch>
+   2. git push
+      Wenn git push wegen eines “non-fastforward Commit” 
+			streikt, müssen erst die Änderungen von Upstream 
+			lokal gemergt werden.
+
+* Git Instaweb
+git instaweb --httpd=webrick
+Dateien für Webinterface erstellen lassen.
+git instaweb --httpd=webrick [--start | --stop | --restart]
+Webinterface starten
+* git rebase
+ - git rebase [-i | --interactive] [options] 
+   [--onto <newbase>] [<upstream>] [<branch>] 
+
+ - git rebase [-i | --interactive] [options] 
+   --onto <newbase> --root [<branch>] 
+
+ - git rebase --continue | --skip | --abort
+
+*** Short DESCRIPTION
+ * *checkout <branch>* / current branch.
+ * All changes made by *commits in the <branch> but that are not*
+   *in <upstream>* are saved to a temporary area. This is the same set
+   of commits that would be shown by git log <upstream>..HEAD (or
+   git log HEAD, if --root is specified).
+ * The *<branch> is reset to <upstream>, or <newbase> if the*
+   *--onto* option was supplied. This has the exact same effect as git
+   reset --hard <upstream> (or <newbase>). 
+ * The *commits* previously saved are then *reapplied to*
+   *<upstream> / <newbase>*
+
+*** DESCRIPTION
+If <branch> is specified, git rebase will perform an automatic git
+checkout <branch> before doing anything else. Otherwise it remains
+on the current branch.
+
+If <upstream> is not specified, the upstream configured in
+branch.<name>.remote and branch.<name>.merge options will be used;
+see git-config(1) for details. If you are currently not on any
+branch or if the current branch does not have a configured
+upstream, the rebase will abort.
+
+All changes made by commits in the current branch but that are not
+in <upstream> are saved to a temporary area. This is the same set
+of commits that would be shown by git log <upstream>..HEAD (or
+git log HEAD, if --root is specified).
+
+The current branch is reset to <upstream>, or <newbase> if the
+--onto option was supplied. This has the exact same effect as git
+reset --hard <upstream> (or <newbase>). ORIG_HEAD is set to point
+at the tip of the branch before the reset.
+
+The commits that were previously saved into the temporary area are
+then reapplied to the current branch, one by one, in order. Note
+that any commits in HEAD which introduce the same textual changes
+as a commit in HEAD..<upstream> are omitted (i.e., a patch already
+accepted upstream with a different commit message or timestamp
+will be skipped).
+
+It is possible that a merge failure will prevent this process from
+being completely automatic. You will have to resolve any such
+merge failure and run git rebase --continue. Another option is to
+bypass the commit that caused the merge failure with git rebase
+--skip. To check out the original <branch> and remove the
+.git/rebase-apply working files, use the command git rebase
+--abort instead.
+
+*** Beispiele
+**** git rebase master topic
+Assume the following history exists and the current branch is "topic":
+
+~          A---B---C topic
+~         /
+~    D---E---F---G master
+
+From this point, the result of either of the following commands:
+
+*git rebase master*
+*git rebase master topic*
+
+would be:
+
+~                  A'--B'--C' topic
+~                 /
+~    D---E---F---G master
+
+NOTE: The latter form is just a short-hand of git checkout topic 
+followed by git rebase master. When rebase exits topic will 
+remain the checked-out branch.
+
+If the upstream branch already contains a change you have made 
+(e.g., because you mailed a patch which was applied upstream), 
+then that commit will be skipped. For example, running ‘git 
+rebase master` on the following history (in which A’ and A 
+introduce the same set of changes, but have different committer 
+information):
+
+~          A---B---C topic
+~         /
+~    D---E---A'---F master
+
+will result in:
+
+~                   B'---C' topic
+~                  /
+~    D---E---A'---F master
+
+**** rebase --onto
+***** First let’s assume your topic is based on branch next
+For example, a feature developed in topic depends on some 
+functionality which is found in next.
+
+~    o---o---o---o---o  master
+~         \
+~          o---o---o---o---o  next
+~                           \
+~                            o---o---o  topic
+
+We want to make topic forked from branch master; for example, 
+because the functionality on which topic depends was merged 
+into the more stable master branch. We want our tree to look
+like this:
+
+~    o---o---o---o---o  master
+~        |            \
+~        |             o'--o'--o'  topic
+~        \
+~         o---o---o---o---o  next
+
+We can get this using the following command:
+
+*git rebase --onto master next topic*
+
+***** Another example of --onto option is to rebase part of a branch
+If we have the following situation:
+
+~                            H---I---J topicB
+~                           /
+~                  E---F---G  topicA
+~                 /
+~    A---B---C---D  master
+
+then the command
+
+*git rebase --onto master topicA topicB*
+
+would result in:
+
+~                 H'--I'--J'  topicB
+~                /
+~                | E---F---G  topicA
+~                |/
+~    A---B---C---D  master
+
+This is useful when topicB does not depend on topicA.
+** Rebase-Workflow
+*** Rebase auch zum Pushen
+1) git checkout 7.x-1.x  
+       * Check out the "public" branch
+2) git pull              
+       * Get the latest version from remote
+3) git checkout -b comment_broken_links_101026  
+       * topical branch
+4) ... # do stuff here.. Make commits.. test...
+   git fetch origin      
+	   * Update your repository's origin/ branches from remote repo
+   git rebase origin/7.x-1.x  
+       * Plop our commits on top of everybody else's
+5) git checkout 7.x-1.x  
+       * Switch to the local tracking branch
+6) git pull              
+       * This won't result in a merge commit
+7) *git rebase comment_broken_links_101026*
+       * Pull those commits over to the "public" branch
+8) git push               
+       * Push the public branch back up, with my stuff on the top
+
+*** Merge zum Pushen
+1) Pull to update your local master
+   git pull origin master
+2) Check out a feature branch
+   git checkout -b 3275-add-commenting
+3) Do work in your feature branch, committing early and often
+4) Rebase frequently to incorporate upstream changes
+   git fetch origin master
+   git rebase origin/master
+   * NB: This is often done by checking master out and pulling, but this method requires extra steps:
+5) git checkout master
+6) git pull
+7) git checkout 3275-add-commenting
+8) git rebase master
+9) Interactive rebase (squash) your commits
+   git rebase -i origin/master
+10) Merge your changes with master
+    git checkout master
+    *git merge 3275-add-commenting*
+11) Push your changes to the upstream
+    git push origin master
+
+* Quellen/Links
+ * http://progit.org/book
+ * http://book.git-scm.com/index.html
+ * http://weinimo.de/Git-Hilfen
+ * http://www.kernel.org/pub/software/scm/git/docs/gittutorial.html
+ * http://www.kernel.org/pub/software/scm/git/docs/gitcore-tutorial.html
+ * http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#viewing-old-file-versions
+ * http://www.kernel.org/pub/software/scm/git/docs/gitcvs-migration.html
+ * http://www.kernel.org/pub/software/scm/git/docs/gitglossary.html
+ * http://www.kernel.org/pub/software/scm/git/docs/gitworkflows.html
+ * http://www.kernel.org/pub/software/scm/git/docs/everyday.html
+ * https://git.wiki.kernel.org/index.php/GitDocumentation 
+ * http://osteele.com/archives/2008/05/my-git-workflow
+ * http://upload.wikimedia.org/wikipedia/commons/2/29/Git_data_floqqqqqqqqqqqqw12ya<sw.png
+ * http://opinionated-programmer.com/2011/01/colorful-bash-prompt-reflecting-git-status/
+
+* a
+
