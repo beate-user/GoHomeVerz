@@ -199,3 +199,11 @@ sed -e "s/\(#[[:digit:]]\+\)/\n\1\n/g" /tmp/deb.txt |grep "#"|sort -u
 
 
 
+** android WLAN
+1) Connect the device via USB and make sure debugging is working.
+2) adb tcpip 5555
+3) find the IP address with adb shell netcfg or adb shell ifconfig with 6.0 and higher
+4) adb connect <DEVICE_IP_ADDRESS>:5555
+5) Disconnect USB and proceed with wireless debugging.
+6) adb -s <DEVICE_IP_ADDRESS>:5555 usb to switch back when done.
+
