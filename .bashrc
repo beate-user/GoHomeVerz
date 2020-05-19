@@ -361,3 +361,8 @@ title() {
 }
 
 export PATH=$PATH:/home/murvin/arbeit/
+xmodmap -e "pointer = 1 2 3" 1>/dev/null 2>&1
+xmodmap -e "clear lock"
+setxkbmap -option caps:none
+xset r rate 225 60
+xmodmap -e "keycode 66 = Shift_L NoSymbol Shift_L"

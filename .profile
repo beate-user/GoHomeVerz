@@ -27,4 +27,8 @@ xmodmap -e "clear lock"
 setxkbmap -option caps:none
 # xset r rate 225 50
 xset r rate 225 60
+xmodmap -e "keycode 66 = Shift_L NoSymbol Shift_L"
 export SWT_GTK3=0
+eval `ssh-agent -s`
+# export PATH=$PATH:/home/murvin/bin
+export PATH
