@@ -32,6 +32,25 @@ PARAM="-m 2048 -hda "$IMAGE" -cdrom "$CDR" -boot c "$*" -net nic -net user,hostf
 echo $PARAM
 DISPLAY= kvm $PARAM </dev/null >/dev/null 2>&1
 #nice kvm $PARAM
+**** VNC + password + telnet-monitor
+ * [ohne terminal] DISPLAY=
+ * kvm
+ * [Speicher] -m 8120
+ * [image] -hda /usr/local/VMS/Win10/Win10.ovl
+ * -cdrom /usr/local/VMS/ISO/Win10_1903_V2_EnglishInternational_x64.iso
+ * -boot c
+ * [Portforward] -net nic -net user,hostfwd=tcp::12222-:22
+ * -usbdevice tablet -k de
+ * [CPU-Cores] -smp 6,sockets=2,cores=3
+ * [USB-Passthrough] -usb -device usb-host,productid=0x0001,vendorid=0x0a12
+ * -usb -device usb-host,vendorid=0x811e,productid=0x8846
+ * -snapshot
+ * -vga vmware
+ * [VNC+password] -vnc :47,password
+ * [monitor auf telnet] -monitor telnet:127.0.0.1:55555,server,nowait &
+ * [Passwort setzen] { sleep 2; printf "change vnc password\n%s\n" XxXxXx | nc -N 127.0.0.1 55555; echo "OK"; }
+
+DISPLAY= kvm -m 8120 -hda /usr/local/VMS/Win10/Win10.ovl -cdrom /usr/local/VMS/ISO/Win10_1903_V2_EnglishInternational_x64.iso -boot c -net nic -net user,hostfwd=tcp::12222-:22 -usbdevice tablet -k de -smp 6,sockets=2,cores=3 -usb -device usb-host,productid=0x0001,vendorid=0x0a12 -usb -device usb-host,vendorid=0x811e,productid=0x8846 -snapshot -vga vmware -vnc :47,password -monitor telnet:127.0.0.1:55555,server,nowait & { sleep 2; printf "change vnc password\n%s\n" 12qw12as | nc -N 127.0.0.1 55555; echo "OK"; }
 
 
 

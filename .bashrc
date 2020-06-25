@@ -184,23 +184,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# left hand mouse
-# xmodmap -e "pointer = 3 2 1"
-#sshfs  murvin@goxv30002638b:/home/murvin/ /home/murvin/net/ 
-#sshfs  murvin@goxv30002638b:/mnt/exthd/homebackup/home/murvin/ /mnt/exthd/homebackup/home/murvin
-if [ ! -e /mnt/exthd/homebackup/home/murvin ]
-then
-#  sshfs  murvin@192.168.1.2:/mnt/exthd/homebackup/home/ /mnt/exthd/homebackup/home -o umask=0022
-  sshfs  murvin@192.168.1.2:/mnt/exthd/homebackup/home/ /mnt/exthd/homebackup/home
-fi
-
-# keyboard schnell
-xset r rate 250 50
-# mouse schnell
-xset m 1 1
-# mouse links
-
-
 ## >> MK 201209211035
 ## >>> GIT-Prompt >>>
 ## branch != origin/branch
@@ -364,5 +347,9 @@ export PATH=$PATH:/home/murvin/arbeit/
 xmodmap -e "pointer = 1 2 3" 1>/dev/null 2>&1
 xmodmap -e "clear lock"
 setxkbmap -option caps:none
-xset r rate 225 60
+xset r rate 250 50
 xmodmap -e "keycode 66 = Shift_L NoSymbol Shift_L"
+# mouse schnell
+# xset m 1 1
+
+
