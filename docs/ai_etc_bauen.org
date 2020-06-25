@@ -207,10 +207,9 @@ sed -e "s/\(#[[:digit:]]\+\)/\n\1\n/g" /tmp/deb.txt |grep "#"|sort -u
 ssh -Y -C -i /home/murvin/sammlungsmanager/sama_alto_private_key.pem ubuntu@18.195.66.149 -p 22 -R 22222:localhost:22
 *** connect to "bridge"
 **** create tunnel from host to "bridge"
-ssh -Y -C -i aws-mk -L20000:localhost:22222 murvin@18.195.66.149
+ssh -CYNf -i ~/.ssh/aws-mk -L 20000:localhost:22222 murvin@18.195.66.149
 **** connect to local port 
 => LP -> bridgLP -> remoteSSH
-ssh -i .ssh/phywe-mk -p 20000 -CY murvin@localhost
-
+ssh -CY -p 20000 -i ~/.ssh/phywe-mk murvin@localhost
 
 
