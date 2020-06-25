@@ -195,10 +195,6 @@ eval `ssh-agent -s`
 ** git diff zwischen zwei commits und so........
 cd ~/net/ai-git-qs/; git submodule foreach ' git mk-log-long "4.1.20-RC2".."origin/4.1.20.x" ;echo;echo ||: ' > /tmp/deb.txt;cp /tmp/deb.txt /tmp/deb2.txt;vim /tmp/deb2.txt 
 sed -e "s/\(#[[:digit:]]\+\)/\n\1\n/g" /tmp/deb.txt |grep "#"|sort -u
-
-
-
-
 ** android WLAN
 1) Connect the device via USB and make sure debugging is working.
 2) adb tcpip 5555
@@ -206,4 +202,15 @@ sed -e "s/\(#[[:digit:]]\+\)/\n\1\n/g" /tmp/deb.txt |grep "#"|sort -u
 4) adb connect <DEVICE_IP_ADDRESS>:5555
 5) Disconnect USB and proceed with wireless debugging.
 6) adb -s <DEVICE_IP_ADDRESS>:5555 usb to switch back when done.
+** ssh multi-hop-xForward
+*** create tunnel from remote to "bridge"
+ssh -Y -C -i /home/murvin/sammlungsmanager/sama_alto_private_key.pem ubuntu@18.195.66.149 -p 22 -R 22222:localhost:22
+*** connect to "bridge"
+**** create tunnel from host to "bridge"
+ssh -Y -C -i aws-mk -L20000:localhost:22222 murvin@18.195.66.149
+**** connect to local port 
+=> LP -> bridgLP -> remoteSSH
+ssh -i .ssh/phywe-mk -p 20000 -CY murvin@localhost
+
+
 
