@@ -86,6 +86,9 @@
 	mk-check-all = !/home/murvin/git-tools/scripts/check_all
 	mk-branch = !/home/murvin/git-tools/scripts/mk-branch
 	mk-branch-long = !/home/murvin/git-tools/scripts/mk-branch -a
+	mk-branch-list = !git for-each-ref --sort=-committerdate refs/heads/ --format='%(color: red)%(committerdate:iso) %(color:reset)%(objectname) %(color: cyan)%(refname:short) (%(color:green)%(committerdate:relative)%(color:reset))'
+	mk-branch-list-remote = !git for-each-ref --sort=-committerdate refs/remotes/ --format='%(color: red)%(committerdate:iso) %(color:reset)%(objectname) %(color: cyan)%(refname:short) (%(color:green)%(committerdate:relative)%(color:reset))'
+	mk-branch-list-all = !git for-each-ref --sort=-committerdate refs/heads/ refs/remotes/ --format='%(color: red)%(committerdate:iso) %(color:reset)%(objectname) %(color: cyan)%(refname:short) (%(color:green)%(committerdate:relative)%(color:reset))'
 	mk-stash-list = stash list --pretty=format:\"%ai %gd (%h): %s\"
 	mk-stash-list-long = stash list --pretty=format:\"%ai %gd (%H): %s\"
 	mk-submodules-status = submodule foreach git status -uno
