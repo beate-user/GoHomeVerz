@@ -1,0 +1,12 @@
+#+STARTUP: indent
+##+STARTUP: content
+#+STARTUP: overview
+##+STARTUP: hidestars
+##+TODO: ALT | NEU
+#+TODO: TODO(t) RUNNING test(a) | DONE(d)
+##+TODO: TODO(t) | DONE(d)
+##+TODO: REPORT(r) BUG(b) KNOWNCAUSE(k) | FIXED(f)
+#+TODO: delayed | CANCELED(c) INVALID DELAYED
+
+
+* 
