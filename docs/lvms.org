@@ -88,7 +88,30 @@ lvremove /dev/ops/dbbackup
 pvmove /dev/hdb
 **** Remove the unused disk
 vgreduce dev /dev/hdb
-
+*** remove physical volume from filesystem
+**** Reduce/Shrink LVM’s 
+***** df -h /testlvm1
+***** umount /testlvm1
+***** e2fsck -f /dev/mapper/vg01-lv002
+***** resize2fs /dev/mapper/vg01-lv002 80G
+***** lvreduce -L 80G /dev/mapper/vg01-lv002
+***** e2fsck -f /dev/mapper/vg01-lv002
+***** mount /testlvm1
+***** df -h /testlvm1
+***** umount /testlvm1
+**** Remove Physical Volume from a Volume Group 
+***** pvs -o+pv_used
+***** pvmove /dev/sdb1
+***** pvs -o+pv_used
+***** vgreduce myvg /dev/sdb1
+***** pvremove /dev/sdb1
+**** Extend/Increase LVM’s 
+***** lvextend -l100%VG /dev/mapper/vg01-lv002
+***** resize2fs /dev/mapper/vg01-lv002
+***** e2fsck -f /dev/mapper/vg01-lv002
+***** mount /testlvm1
+***** df -h /testlvm1
+***** umount /testlvm1
 * Forensic analysis (RO-Zugriff auf LVMs)
 sudo losetup -r -o $OFFSET /dev/loop1 image.raw
 vgchange -ay -pr $VOLUMEGROUP
