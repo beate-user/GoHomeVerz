@@ -338,6 +338,14 @@ Beispiel: git checkout -b myfeature origin/myfeature
 			streikt, müssen erst die Änderungen von Upstream 
 			lokal gemergt werden.
 
+** import existing local git repo into [gitlab]
+cd existing_repo
+git remote rename origin previous-hosts
+git remote add gitlab git@git.hutber.com:hutber/kindred.com.git
+git push -u gitlab --all
+git push -u gitlab --tags
+
+https://stackoverflow.com/questions/20359936/import-an-existing-git-project-into-gitlab
 * Git Instaweb
 git instaweb --httpd=webrick
 Dateien für Webinterface erstellen lassen.
