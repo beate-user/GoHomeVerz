@@ -69,6 +69,15 @@ git reflog
 git status
 Zeige Dateien, die in den Stage hinzugefügt wurden, 
 Dateien mit Änderungen und ungetrackte Dateien im Arbeitsverzeichnis.
+*** short status
+**** git status -s
+**** git stattus -suall
+ * Give the output in the short-format
+ * Show untracked files
+ * all - Also shows individual files in untracked directories
+**** git status -sb
+ * Give the output in the short-format
+ * Show the branch and tracking info even in short-format
 ** In Dateien suchen
 git grep "foo()"
 Durchsucht alle getrackten Dateien nach foo().
@@ -135,7 +144,6 @@ an allen getrackten Dateien übernommen werden.
 ** Version markieren
 git tag v1.0
 Taggt aktuelles Commit als v1.0
-
 * Branches
 ** Neuen branch erstellen und gleichzeitig auschecken
 git checkout -b <new> <start-point>
@@ -178,7 +186,26 @@ Beispiel: git checkout somebranch abc/testfile.txt
 git show <branch> -- <path to file that does not exist>
 Beispiel: git show remote_tick702 -- path/to/fubar.txt
 Datei darf nicht im aktuellen Branch existieren.
-
+* remotes
+** show branch remote 
+*** git status -sb
+ * Give the output in the short-format
+ * Show the branch and tracking info even in short-format
+*** git branch -vvv
+*** git remote show origin
+** rename remote
+*** git remote rename OLD NEW
+** set remote branch
+git branch (--set-upstream-to=<upstream> | -u <upstream>) [<branchname>]
+** publishing (push) a local branch
+git push -u origin dev
+** checkout with setting remote
+*** git checkout --track origin/dev
+*** git checkout -b NEWBRANCH origin/serverfix
+!!! NEWBRANCHs tracking branch is set to "origin/serverfix"
+    and not as you might expect to NEWBRANCH or something. !!!
+** remove upstream from branch
+git branch --unset-upstream [<branchname>]
 * Mergen
 ** Branch in aktuellen Branch mergen
 git merge <branch>
