@@ -190,7 +190,18 @@ rsync -azv -e "ssh -l UID -i IDFILE" SRC DST >> $LOGFILE &
  * set-fill-colum -> 80
  * set-justification-full
  * fill-region-as-paragraph
-** ssh-agent
+** ssh
+*** ssh pub key login
+**** extract pub key from priv key
+put into auth_keys on remote host
+ssh-keygen -f /tmp/pke.txt -y
+**** get serverkey
+put into known_keys
+ssh-keyscan 10.11.48.37
+**** extract short serverkey
+you can find it if ssh -vvv is called
+ssh-keygen -l -F 10.11.48.37
+*** ssh-agent
 eval `ssh-agent -s`
 ** git diff zwischen zwei commits und so........
 cd ~/net/ai-git-qs/; git submodule foreach ' git mk-log-long "4.1.20-RC2".."origin/4.1.20.x" ;echo;echo ||: ' > /tmp/deb.txt;cp /tmp/deb.txt /tmp/deb2.txt;vim /tmp/deb2.txt 

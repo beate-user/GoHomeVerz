@@ -57,6 +57,8 @@ the second <commit>, starting at a common ancestor of both
 <commit>. "git diff A...B" is equivalent to "git diff
 $(git-merge-base A B) B". You can omit any one of <commit>, which has
 the same effect as using HEAD instead.
+*** diffs between branches without merge commits or cherry picks
+git log --cherry-pick --right-only origin/master...origin/release/5.4.1 --no-merges
 ** Alle Dateien im Repo anzeigen
 git ls-tree master
 git ls-files
