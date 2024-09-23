@@ -188,7 +188,49 @@ Beispiel: git checkout somebranch abc/testfile.txt
 git show <branch> -- <path to file that does not exist>
 Beispiel: git show remote_tick702 -- path/to/fubar.txt
 Datei darf nicht im aktuellen Branch existieren.
-* remotes
+* Remotes
+** Repository klonen
+git clone ssh://user@host.org/project.git
+Default Protokoll ist ssh:.
+** Durch klonen neues Upstream Repository erstellen
+git clone --bare ssh://user@host/project.git
+** Remote Repository in die git config eintragen
+git remote add <remote> <remote_URL>
+Danach kann mit git pull vom remote Repository gepullt werden.
+Beispiel:
+   1. git remote add coreteam git://github.com/wycats/merb-plugins.git
+   2. git pull coreteam
+** Branch upstream löschen
+git push <reository> :<branch>
+** Branch upstream erstellen
+git push <reository> <local_src>:<remote_dst>
+** Branch upstream überschreiben
+git push <repository> +<local_src>:<remote_dst>
+This can leave unreferenced commits dangling in the origin repository.
+** Stutzen (prune)
+git remote prune <remote>
+Entfernt gelöschte remote-tracking Branches aus dem git branch -r listing.
+** Ein Remote hinzufügen und dessen master tracken
+git remote add -t master -m master origin git://example.com/git.git/
+** Informationen über Remote anzeigen
+git remote show <remote>.
+Beispiel: git remote show origin
+** Upstream Branch lokal tracken
+git checkout -b <local branch> <remote>/<remote branch>
+Beispiel: git checkout -b myfeature origin/myfeature
+** Non-fastforward Commits
+   1. git pull <remote> <branch>
+   2. git push
+      Wenn git push wegen eines “non-fastforward Commit” 
+			streikt, müssen erst die Änderungen von Upstream 
+			lokal gemergt werden.
+** import existing local git repo into [gitlab]
+cd existing_repo
+git remote rename origin previous-hosts
+git remote add gitlab git@git.hutber.com:hutber/kindred.com.git
+git push -u gitlab --all
+git push -u gitlab --tags
+https://stackoverflow.com/questions/20359936/import-an-existing-git-project-into-gitlab
 ** show branch remote 
 *** git status -sb
  * Give the output in the short-format
@@ -330,51 +372,6 @@ Das ist immer dann unbedingt nötig, wenn man neue Branches
 mit Upstream teilen will. Danach reicht ein einfaches git push.
 git push origin <branch>:refs/heads/<branch> macht dasselbe.
 
-* Remotes
-** Repository klonen
-git clone ssh://user@host.org/project.git
-Default Protokoll ist ssh:.
-** Durch klonen neues Upstream Repository erstellen
-git clone --bare ssh://user@host/project.git
-** Remote Repository in die git config eintragen
-git remote add <remote> <remote_URL>
-Danach kann mit git pull vom remote Repository gepullt werden.
-Beispiel:
-   1. git remote add coreteam git://github.com/wycats/merb-plugins.git
-   2. git pull coreteam
-** Branch upstream löschen
-git push <reository> :<branch>
-** Branch upstream erstellen
-git push <reository> <local_src>:<remote_dst>
-** Branch upstream überschreiben
-git push <repository> +<local_src>:<remote_dst>
-This can leave unreferenced commits dangling in the origin repository.
-** Stutzen (prune)
-git remote prune <remote>
-Entfernt gelöschte remote-tracking Branches aus dem git branch -r listing.
-** Ein Remote hinzufügen und dessen master tracken
-git remote add -t master -m master origin git://example.com/git.git/
-** Informationen über Remote anzeigen
-git remote show <remote>.
-Beispiel: git remote show origin
-** Upstream Branch lokal tracken
-git checkout -b <local branch> <remote>/<remote branch>
-Beispiel: git checkout -b myfeature origin/myfeature
-** Non-fastforward Commits
-   1. git pull <remote> <branch>
-   2. git push
-      Wenn git push wegen eines “non-fastforward Commit” 
-			streikt, müssen erst die Änderungen von Upstream 
-			lokal gemergt werden.
-
-** import existing local git repo into [gitlab]
-cd existing_repo
-git remote rename origin previous-hosts
-git remote add gitlab git@git.hutber.com:hutber/kindred.com.git
-git push -u gitlab --all
-git push -u gitlab --tags
-
-https://stackoverflow.com/questions/20359936/import-an-existing-git-project-into-gitlab
 * Git Instaweb
 git instaweb --httpd=webrick
 Dateien für Webinterface erstellen lassen.
