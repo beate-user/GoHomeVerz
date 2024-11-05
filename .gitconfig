@@ -1,3 +1,5 @@
+[credential]
+	helper = manager-core
 [push]
 	default = upstream
 [init]
@@ -68,6 +70,7 @@
 
 	mk-test = log --no-color --pretty=format:\"%ct %H <- %P %d %an [%cn] : %s\"
 	mk-log = log --no-color --pretty=format:\"%ai [%ci] %h <- %p %d %an [%cn]\"
+	mk-logX = log --no-color --pretty=format:\"%ai [%ci] %h <- %p %d %an [%cn] : %s\"
 	mk-whatchanged = whatchanged -w -b --no-color --pretty=format:\" %ai [%ci] %h <- %p %d %an [%cn]\"
 	mk-log-one = log -1 --no-color --pretty=format:\"%ai [%ci] %h <- %p %d %an [%cn]\"
 	mk-whatchanged-one = whatchanged -1 -w -b --no-color --pretty=format:\"%ai [%ci] %h <- %p %d %an [%cn]\"
@@ -78,20 +81,27 @@
 
 	mk-diff = diff -U0 -w -b
 	mk-diff-nice = difftool --no-prompt --tool=robe
-	mk-check = !/home/murvin/git-tools/scripts/check
-	mk-find-ticket = !/home/murvin/git-tools/scripts/git-find-ticket
-	mk-status = !/home/murvin/git-tools/scripts/status
-	mk-s = !/home/murvin/git-tools/scripts/stat
-	mk-branch-off = !perl /home/murvin/git-tools/scripts/branch_off
-	mk-check-all = !/home/murvin/git-tools/scripts/check_all
-	mk-branch = !/home/murvin/git-tools/scripts/mk-branch
-	mk-branch-long = !/home/murvin/git-tools/scripts/mk-branch -a
+#	mk-check = !/home/murvin/git-tools/scripts/check
+#	mk-find-ticket = !/home/murvin/git-tools/scripts/git-find-ticket
+#	mk-status = !/home/murvin/git-tools/scripts/status
+#	mk-s = !/home/murvin/git-tools/scripts/stat
+#	mk-branch-off = !perl /home/murvin/git-tools/scripts/branch_off
+#	mk-check-all = !/home/murvin/git-tools/scripts/check_all
+#	mk-branch = !/home/murvin/git-tools/scripts/mk-branch
+#	mk-branch-long = !/home/murvin/git-tools/scripts/mk-branch -a
 	mk-branch-list = !git for-each-ref --sort=-committerdate refs/heads/ --format='%(color: red)%(committerdate:iso) %(color:reset)%(objectname) %(color: cyan)%(refname:short) (%(color:green)%(committerdate:relative)%(color:reset))'
 	mk-branch-list-remote = !git for-each-ref --sort=-committerdate refs/remotes/ --format='%(color: red)%(committerdate:iso) %(color:reset)%(objectname) %(color: cyan)%(refname:short) (%(color:green)%(committerdate:relative)%(color:reset))'
 	mk-branch-list-all = !git for-each-ref --sort=-committerdate refs/heads/ refs/remotes/ --format='%(color: red)%(committerdate:iso) %(color:reset)%(objectname) %(color: cyan)%(refname:short) (%(color:green)%(committerdate:relative)%(color:reset))'
 	mk-stash-list = stash list --pretty=format:\"%ai %gd (%h): %s\"
 	mk-stash-list-long = stash list --pretty=format:\"%ai %gd (%H): %s\"
 	mk-submodules-status = submodule foreach git status -uno
+	mk-xconflict = "!f() { \
+		git status -s|grep -i "^\\(.u\\|u.\\)"; \
+		}; f"
+#        mk-conflict = "diff --name-only --diff-filter=U --relative | xargs git status"
+	mk-conflict = "!f() { \
+		git diff --name-only --diff-filter=U --relative | xargs git status; \
+		}; f"
 
    	lg = !git lg1
 	lg1 = !git lg1-specific --color --full-history
@@ -100,6 +110,14 @@
     	lg1-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
     	lg2-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
     	lg3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(auto)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'
+
+	wc = !git wc1 --name-status | sed -e "/^$/D"
+	wc1 = !git wc1-specific --color --full-history
+    	wc2 = !git wc2-specific --color --full-history
+    	wc3 = !git wc3-specific --color --full-history
+    	wc1-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
+    	wc2-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
+    	wc3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(auto)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'
 
 [color "decorate"]
 	branch = bold
@@ -110,8 +128,10 @@
 [rebase]
 	stat = true
 [core]
+	longpaths = true
 	whitespace = trailing-space
 	editor = vim
+	autocrlf = input
 #,space-before-tab,indent-with-non-tab,tabwidth=1
 [apply]
 	ignorewhitespace = change
@@ -140,11 +160,14 @@
 [http]
 	proxy = http://proxy.wdf.sap.corp:8080/
 
+[mergetool.code]
+	cmd = code --wait --merge $REMOTE $LOCAL $BASE $MERGED
+	trustExitCode = false
 [credential]
 	helper = cache --timeout=28800
 
 [difftool.code]
-	cmd = code --wait --diff $LOCAL $REMOTE
+	cmd = code --wait --diff $REMOTE $LOCAL 
 
 [difftool.robe] 
 	cmd = /home/murvin/toolsetc/arbeit/roberteldersoftwarediff/roberteldersoftwarediff.py $REMOTE $LOCAL
@@ -152,3 +175,26 @@
 
 
 	
+[mergetool "mk-gvimdiff"]
+	keepBackup = false
+	cmd = /c/Users/murvin.kosinski/bin/diffconflicts.sh gvim $BASE $LOCAL $REMOTE $MERGED
+	trustExitCode = false
+[mergetool "mk-vimdiff"]
+	keepBackup = false
+	cmd = /c/Users/murvin.kosinski/bin/diffconflicts.sh vim $BASE $LOCAL $REMOTE $MERGED
+	trustExitCode = false
+[mergetool "intellij"]
+#	cmd = cmd.exe //c "\"C:/Program Files (x86)/IntelliJ IDEA Community Edition 12.0/bin/idea.bat\" merge \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\""
+	cmd = cmd.exe //c "\"C:/Program Files (x86)/JetBrains/IntelliJ IDEA 2022.3.3/bin/idea64.exe\" merge \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\""
+	trustExitCode = false
+[difftool "intellij"]
+#	cmd="\"C:/Program Files (x86)/IntelliJ IDEA Community Edition 12.0/bin/idea.bat\" diff \"$LOCAL\" \"$REMOTE\""
+	cmd = cmd.exe //c "\"C:/Program Files (x86)/JetBrains/IntelliJ IDEA 2022.3.3/bin/idea64.exe\" diff \"$LOCAL\" \"$REMOTE\""
+	trustExitCode = false
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[branch]
+	autoSetupMerge = false
