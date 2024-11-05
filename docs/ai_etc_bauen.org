@@ -222,5 +222,7 @@ ssh -CYNf -i ~/.ssh/aws-mk -L 20000:localhost:22222 murvin@18.195.66.149
 **** connect to local port 
 => LP -> bridgLP -> remoteSSH
 ssh -CY -p 20000 -i ~/.ssh/phywe-mk murvin@localhost
-
+** arch linux
+*** update all
+pacman-key --refresh-keys && pacman -S archlinux-keyring --noconfirm && pacman -Suy --noconfirm
 
