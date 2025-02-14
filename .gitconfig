@@ -78,7 +78,7 @@
 	mk-whatchanged-long = whatchanged -b -w --no-color --pretty=format:\" %ai [%ci] %H <- %P %d %an [%cn] : %s\"
 	mk-log-one-long = log -1 --no-color --pretty=format:\"%ai [%ci] %H <- %P %d %an [%cn] : %s\"
 	mk-whatchanged-one-long = whatchanged -1 -w -b --no-color --pretty=format:\"%ai [%ci] %H <- %P %d %an [%cn] : %s\"
-
+        mk-check-uptodate = fetch --dry-run --verbose 
 	mk-diff = diff -U0 -w -b
 	mk-diff-nice = difftool --no-prompt --tool=robe
 #	mk-check = !/home/murvin/git-tools/scripts/check
