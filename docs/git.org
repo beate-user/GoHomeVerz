@@ -146,6 +146,11 @@ an allen getrackten Dateien übernommen werden.
 ** Version markieren
 git tag v1.0
 Taggt aktuelles Commit als v1.0
+** signing
+git config --global commit.gpgsign true
+git config --global tag.gpgSign true
+git config --global gpg.format ssh
+git config --global user.signingkey /PATH/TO/.SSH/KEY.PUB
 * Branches
 ** Neuen branch erstellen und gleichzeitig auschecken
 git checkout -b <new> <start-point>
