@@ -276,6 +276,44 @@ git diff --ours <file>
 ** Konflikt-Patch verwerfen
 git reset --hard && git rebase --skip
 
+** ours / theirs
+*** merge
+ git checkout <<master1>>
+ git merge <<feature1>>
+ * git checkout --ours codefile.js
+   selects changes from *[[master1]]*
+ * git checkout --theirs codefile.js
+   selects changes from *[[feature1]]*
+*** rebase
+ git checkout <<feature2>>
+ git rebase <<master2>>
+ * git checkout --ours codefile.js
+   selects changes from *[[master2]]*
+ * git checkout --theirs codefile.js
+   selects changes from *[[feature2]]*
+*** stash
+ git checkout <<master3>>
+ git <<stash>> pop
+ * git checkout --ours codefile.js
+   selects changes from *[[master3]]*
+ * git checkout --theirs codefile.js
+   selects changes from *[[stash]]*
+** commit reference
+*** merge / MERGE_HEAD
+ * git restore *HEAD* thing.js
+   use what the *current* branch has
+ * git restore MERGE_HEAD thing.js
+   use what the other branch has
+*** rebase / REBASE_HEAD
+ * git restore *HEAD* thing.js
+   use what the *current* branch has
+ * git restore REBASE_HEAD thing.js
+   use what the other branch has
+*** cherry pick / CHERRY_PICK_HEAD
+ * git restore *HEAD* thing.js
+   use what the *current* branch has
+ * git restore CHERRY_PICK_HEAD thing.js
+   use what the other branch has
 * Stashing
 ** Nicht Commitete Änderungen zwischenspeichern
 git stash
