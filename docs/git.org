@@ -143,9 +143,13 @@ git commit --amend <file1> <file2> ...
 ACHTUNG: Ausführen, nachdem die Dateien berichtigt wurden.
 Statt die einzelnen Dateien anzugeben können mit -a Änderungen
 an allen getrackten Dateien übernommen werden.
-** Version markieren
+* Version markieren / tagging
 git tag v1.0
 Taggt aktuelles Commit als v1.0
+** rename
+git tag new old
+git tag -d old
+git push origin new :old       # Push `new` to your remote named "origin", and delete tag `old`.
 ** signing
 git config --global commit.gpgsign true
 git config --global tag.gpgSign true
