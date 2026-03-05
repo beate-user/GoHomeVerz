@@ -104,6 +104,8 @@
 		git diff --name-only --diff-filter=U --relative | xargs git status; \
 		}; f"
 
+    sstatus = !git status -sb|sed \"s/^ \\(.\\)/.\\1/\" | sed \"s/^\\(.\\) /\\1./\"
+
    	lg = !git lg1
 	lg1 = !git lg1-specific --color --full-history
     	lg2 = !git lg2-specific --color --full-history
