@@ -10,8 +10,10 @@
 ** openssl enccrypt decrypt
 *** Encrypt
 openssl aes-256-cbc -a -salt -pbkdf2 -in secrets.txt -out secrets.txt.enc
+openssl enc -aes-256-cbc -md sha512 -pbkdf2 -iter 250000 -salt -in InputFilePath -out OutputFilePath
 *** Decrypt
 openssl aes-256-cbc -d -a -pbkdf2 -in secrets.txt.enc -out secrets.txt.new
+openssl enc -aes-256-cbc -d -md sha512 -pbkdf2 -iter 250000 -salt -in InputFilePath -out OutputFilePath
 ** Systeminfos
 *** smartctl -a /dev/sda
 *** lspci -vvv
