@@ -103,6 +103,8 @@
 	mk-conflict = "!f() { \
 		git diff --name-only --diff-filter=U --relative | xargs git status; \
 		}; f"
+    mk-merge-cleanup = "!find ./ -iname "*.orig" | xargs -I {} rm {};find ./ -name "*_BASE_*" | xargs -I {} rm {};find ./ -name "*_LOCAL_*" | xargs -I {} rm {};find ./ -name "*_REMOTE_*" | xargs -I {} rm {};find ./ -name "*_BACKUP_*" | xargs -I {} rm {}"    
+    mk-checkout = "!git checkout $(git mk-branch-list | fzf | sed -e \"s/[[:space:]][[:space:]]*/#/g\"|cut -d \"#\" -f 5)"
 
     sstatus = !git status -sb|sed \"s/^ \\(.\\)/.\\1/\" | sed \"s/^\\(.\\) /\\1./\"
 
