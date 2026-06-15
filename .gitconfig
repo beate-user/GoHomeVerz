@@ -106,7 +106,7 @@
     mk-merge-cleanup = "!find ./ -iname "*.orig" | xargs -I {} rm {};find ./ -name "*_BASE_*" | xargs -I {} rm {};find ./ -name "*_LOCAL_*" | xargs -I {} rm {};find ./ -name "*_REMOTE_*" | xargs -I {} rm {};find ./ -name "*_BACKUP_*" | xargs -I {} rm {}"    
     mk-checkout = "!git checkout $(git mk-branch-list | fzf | sed -e \"s/[[:space:]][[:space:]]*/#/g\"|cut -d \"#\" -f 5)"
 
-    sstatus = "!echo \"(git restore --staged <file>...)\" && git status -sb|sed \"s/^ \\(.\\)/.\\1/\" | sed \"s/^\\(.\\) /\\1./\" | sort -k 1.2,2.2"
+    sstatus = "!echo \"(git restore --staged <file>...)\" && res=$(git status -sb|sed \"s/^ \\(.\\)/.\\1/\" | sed \"s/^\\(.\\) /\\1./\") ; echo \"${res}\" | head -1 ; echo \"${res}\" | sed '1d' | sort -k 1.2,2.2"
 
    	lg = !git lg1
 	lg1 = !git lg1-specific --color --full-history
