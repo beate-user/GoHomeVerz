@@ -95,6 +95,7 @@
 	mk-branch-list-all = !git for-each-ref --sort=-committerdate refs/heads/ refs/remotes/ --format='%(color: red)%(committerdate:iso) %(color:reset)%(objectname) %(color: cyan)%(refname:short) (%(color:green)%(committerdate:relative)%(color:reset))'
 	mk-stash-list = stash list --pretty=format:\"%ai %gd (%h): %s\"
 	mk-stash-list-long = stash list --pretty=format:\"%ai %gd (%H): %s\"
+    mk-stash-list-files = "!f() { git stash list --pretty=format:'%ai %gd (%H): %s' | while IFS= read -r line; do stash=$(printf '%s\\n' \"$line\" | sed 's/.* \\(stash@{[^}]*}\\) .*/\\1/'); echo \"=== $line ===\"; git stash show --name-only \"$stash\"; echo; done | less -SR; }; f"
 	mk-submodules-status = submodule foreach git status -uno
 	mk-xconflict = "!f() { \
 		git status -s|grep -i "^\\(.u\\|u.\\)"; \
